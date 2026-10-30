@@ -17,7 +17,7 @@ const photoMap = {
 
   <div class="partners stagger">
     {team.socios.map((socio) => (
-      <article class="partner-card reveal line-top">
+      <article class="partner-card reveal">
         <div class="partner-card__media">
           <Picture
             src={photoMap[socio.photoKey]}
@@ -101,49 +101,25 @@ const photoMap = {
   .partner-card {
     display: flex;
     flex-direction: column;
-    padding-top: var(--space-5);
-    border-top: var(--rule-w) solid var(--rule);
+    padding-top: 0;
   }
 
   .partner-card__media {
     position: relative;
     width: 100%;
-    max-height: 380px;
-    aspect-ratio: 4 / 3.2;
+    max-height: 420px;
+    aspect-ratio: 4 / 3.4;
     overflow: hidden;
     margin-bottom: var(--space-5);
-    border: var(--rule-w) solid var(--rule);
-    background: color-mix(in srgb, var(--bg) 85%, var(--fg));
+    background: transparent;
   }
 
   .partner-card__media :global(.partner-card__img) {
     width: 100%;
-    height: 115%;
+    height: 100%;
     object-fit: cover;
-    object-position: top center;
-    will-change: transform;
-    transform: translateY(-6%);
-  }
-
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .partner-card__media :global(.partner-card__img) {
-        animation-name: partner-img-parallax;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view();
-        animation-range: entry 0% exit 100%;
-      }
-    }
-  }
-
-  @keyframes partner-img-parallax {
-    from {
-      transform: translateY(-7%);
-    }
-    to {
-      transform: translateY(7%);
-    }
+    object-position: center 15%;
+    display: block;
   }
 
   .partner-card__content {
