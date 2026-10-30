@@ -1,0 +1,223 @@
+---
+// Servicios legales: grilla arquitectónica de 6 servicios profesionales (3×2 en escritorio).
+// Fuente oficial: https://delucafmoores.com.ar/servicios-legales/
+import SectionHead from './SectionHead.astro';
+import { servicios } from '../content/servicios.ts';
+---
+
+<section id="servicios" class="servicios band band--paper" aria-labelledby="servicios-title">
+  <div class="servicios__body">
+    <SectionHead title={servicios.title} headingId="servicios-title">
+      <p class="servicios__lead soft lead" data-scroll-in>{servicios.lead}</p>
+    </SectionHead>
+
+    <div class="servicios__grid reveal" role="list" aria-label="Listado de servicios legales">
+      {servicios.items.map((item, i) => (
+        <details
+          class="servicio-card"
+          role="listitem"
+          id={`servicio-${item.id}`}
+          data-index={i}
+        >
+          <summary class="servicio-card__head">
+            <h3 class="servicio-card__title">{item.title}</h3>
+            <span class="servicio-card__indicator" aria-hidden="true">+</span>
+          </summary>
+
+          <div class="servicio-card__body">
+            <p class="servicio-card__desc soft">{item.description}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const serviceCards = [...document.querySelectorAll<HTMLDetailsElement>('.servicio-card')];
+  const mobileServices = window.matchMedia('(max-width: 699px)');
+  const syncServiceDisclosure = () => {
+    serviceCards.forEach((card) => { card.open = !mobileServices.matches; });
+  };
+  serviceCards.forEach((card) => {
+    card.querySelector('summary')?.addEventListener('click', (event) => {
+      if (!mobileServices.matches) event.preventDefault();
+    });
+  });
+  syncServiceDisclosure();
+  mobileServices.addEventListener('change', syncServiceDisclosure);
+</script>
+
+<style>
+  .servicios__body {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .servicios__lead {
+    max-width: 44rem;
+    margin: var(--space-5) 0 0;
+    font-size: var(--step-lead);
+    line-height: var(--leading-body);
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  /* 3-column × 2-row architectural grid on desktop */
+  .servicios__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: var(--space-7);
+    border-top: var(--rule-w) solid var(--rule);
+    border-bottom: var(--rule-w) solid var(--rule);
+    align-items: stretch;
+  }
+
+  .servicio-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6) var(--space-5);
+    border-right: var(--rule-w) solid var(--rule);
+    border-bottom: var(--rule-w) solid var(--rule);
+    transition: background-color var(--dur-ui) var(--ease-out);
+  }
+
+  /* Open outer right edge and avoid double bottom rule on desktop (3 cols) */
+  @media (min-width: 1024px) {
+    .servicio-card:nth-child(3n) {
+      border-right: none;
+    }
+    .servicio-card:nth-child(n + 4) {
+      border-bottom: none;
+    }
+  }
+
+  @media (hover: hover) {
+    .servicio-card:hover {
+      background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+    }
+    .servicio-card:hover .servicio-card__title { color: var(--accent); }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .servicio-card {
+        animation-name: servicio-card-entrance;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 40%;
+      }
+      .servicio-card:nth-child(1) { animation-delay: 0ms; }
+      .servicio-card:nth-child(2) { animation-delay: 50ms; }
+      .servicio-card:nth-child(3) { animation-delay: 100ms; }
+      .servicio-card:nth-child(4) { animation-delay: 40ms; }
+      .servicio-card:nth-child(5) { animation-delay: 90ms; }
+      .servicio-card:nth-child(6) { animation-delay: 140ms; }
+    }
+  }
+
+  @keyframes servicio-card-entrance {
+    from {
+      opacity: 0.35;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .servicio-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .servicio-card__head::-webkit-details-marker { display: none; }
+  .servicio-card__head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  @media (min-width: 700px) {
+    .servicio-card__head { cursor: default; }
+    .servicio-card__indicator { display: none; }
+  }
+
+  .servicio-card__title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.35rem, 1.2rem + 0.45vw, 1.68rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: var(--tracking-heading);
+    margin: 0;
+    color: var(--fg);
+    text-align: left;
+    text-wrap: balance;
+    transition: color var(--dur-ui) var(--ease-out);
+  }
+  .servicio-card__indicator {
+    flex: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+  }
+  .servicio-card[open] .servicio-card__indicator { transform: rotate(45deg); color: var(--accent); }
+
+  .servicio-card__body {
+    border-top: var(--rule-w) solid var(--rule);
+    padding-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+  .servicio-card:not([open]) > .servicio-card__body { display: none; }
+
+  .servicio-card__desc {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: var(--leading-body);
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  /* Tablet: 2-column × 3-row grid */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .servicios__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: var(--space-6);
+    }
+
+    .servicio-card {
+      padding: var(--space-5) var(--space-4);
+    }
+
+    .servicio-card:nth-child(2n) {
+      border-right: none;
+    }
+
+    .servicio-card:nth-child(n + 5) {
+      border-bottom: none;
+    }
+  }
+
+  /* Mobile: 1-column stack */
+  @media (max-width: 639px) {
+    .servicios__grid {
+      grid-template-columns: 1fr;
+      margin-top: var(--space-6);
+    }
+
+    .servicio-card {
+      padding: var(--space-5) var(--space-2);
+      border-right: none;
+      border-bottom: var(--rule-w) solid var(--rule);
+    }
+
+    .servicio-card:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import alegam from '../../alegam.webp';
+import barralParente from '../../barralparente.webp';
+---
+<section id="asociaciones" class="asociaciones band band--stone" aria-labelledby="asociaciones-title">
+  <SectionHead title={['Asociaciones']} headingId="asociaciones-title" />
+
+  <div class="asociaciones__grid">
+    <article class="asociacion line-top">
+      <div class="asociacion__body">
+        <h3>Derecho a la Salud</h3>
+        <p>Área dedicada al derecho a la salud que nos ubicó entre los más importantes y reconocidos especialistas en la materia, con un importante crecimiento y éxito en el área de la salud.</p>
+      </div>
+      <div class="asociacion__marca">
+        <a class="asociacion__link" href="https://alegam.com.ar/" target="_blank" rel="noopener noreferrer" aria-label="Visitar el sitio de ALEGAM (se abre en una pestaña nueva)">
+          <Picture src={alegam} formats={['avif', 'webp']} widths={[180, 300, 500]} sizes="(min-width: 900px) 18vw, 60vw" alt="ALEGAM, asesoramiento en derecho a la salud" loading="lazy" decoding="async" />
+        </a>
+      </div>
+    </article>
+
+    <article class="asociacion line-top">
+      <div class="asociacion__body">
+        <h3>BPP Consultores</h3>
+        <p>Somos los socios argentinos de Barral Parente Pinheiro Abogados, prestigiosa firma brasileña, con sedes en Brasilia y San Pablo.</p>
+      </div>
+      <div class="asociacion__marca asociacion__marca--bpp">
+        <a class="asociacion__link" href="https://barralparente.com.br/argentina" target="_blank" rel="noopener noreferrer" aria-label="Visitar Barral Parente Pinheiro Argentina (se abre en una pestaña nueva)">
+          <Picture src={barralParente} formats={['avif', 'webp']} widths={[240, 400, 640]} sizes="(min-width: 900px) 24vw, 80vw" alt="Barral Parente Pinheiro" loading="lazy" decoding="async" />
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .asociaciones { padding-block: var(--section-y); }
+  .asociaciones__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(var(--space-6), 4vw, var(--space-8)); margin-top: var(--space-7); }
+  .asociacion { display: grid; grid-template-rows: 1fr auto; row-gap: var(--space-5); padding-top: var(--space-5); border-top: var(--rule-w) solid var(--rule); }
+  .asociacion__body h3 { margin: 0 0 var(--space-3); font-size: var(--step-2); }
+  .asociacion__body p { max-width: 38rem; margin: 0; color: var(--soft); font-size: var(--step-0); line-height: var(--leading-body); }
+  .asociacion__marca { display: flex; align-items: center; min-height: 5rem; padding-top: var(--space-4); border-top: var(--rule-w) solid var(--rule); }
+  .asociacion__link { display: inline-flex; max-width: 100%; cursor: pointer; }
+  .asociacion__link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .asociacion__link :global(img) { display: block; width: auto; height: auto; max-width: min(100%, 22rem); max-height: 5rem; object-fit: contain; filter: grayscale(1); transition: filter 220ms var(--ease-out); }
+  @media (hover: hover) {
+    .asociacion__link:hover :global(img) { filter: grayscale(1) sepia(1) saturate(0.8) hue-rotate(5deg) brightness(0.82); }
+  }
+  .asociacion__marca--bpp { justify-content: flex-start; }
+  @media (max-width: 899px) {
+    .asociaciones__grid { grid-template-columns: 1fr; gap: var(--space-6); margin-top: var(--space-6); }
+  }
+</style>

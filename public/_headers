@@ -1,0 +1,33 @@
+# Security and caching headers. Cloudflare Workers static assets read this file (it is never served);
+# scripts/serve.mjs applies it locally, so the tests run under the same policy. Nothing on the site
+# is inline, so the CSP needs no 'unsafe-inline' and no hashes. connect-src 'self' lets audit tools
+# (Lighthouse) fetch /robots.txt from the page; the site itself makes no requests. manifest-src 'self'
+# lets the browser read /site.webmanifest (8.4). media-src 'self' lets the hero play its own light (8.5k3), and blob: lets it play that clip from memory (8.6h6b).
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self' blob:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  X-Frame-Options: DENY
+  X-Robots-Tag: noindex, nofollow
+
+# Build assets carry a content hash in their names, so they never change: cache them for a year
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The manifest and the icons have fixed names and rarely change: a day, so a repeat visit doesn't revalidate them
+# (8.6h6). The HTML has no rule: Workers revalidates it on every visit (ETag), so a redeploy shows at once
+/site.webmanifest
+  Cache-Control: public, max-age=86400
+/favicon.svg
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400
+/icon-192.png
+  Cache-Control: public, max-age=86400
+/icon-512.png
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVyA — Hoja de estilo</title>
+<link rel="stylesheet" href="../node_modules/@fontsource-variable/jost/wght.css">
+<link rel="stylesheet" href="../node_modules/@fontsource-variable/geist-mono/wght.css">
+<link rel="stylesheet" href="../src/styles/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); font-weight: var(--weight-regular); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
+  .band { padding: var(--section-y) var(--pad); position: relative; }
+  .ink { background: var(--ink); color: var(--paper); }
+  .forest { background: var(--forest); color: var(--paper); }
+  .stone { background: var(--stone); }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  .label { font-family: var(--font-mono); font-size: var(--step-label); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+  .ink .soft, .graphite .soft { color: var(--muted); }
+  .forest .soft { color: var(--sage); }
+  .soft { color: var(--olive); }
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); }
+
+  /* Hero preview */
+  .hero { min-height: 100svh; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); align-items: end; padding-top: calc(var(--nav-h) + var(--space-8)); padding-bottom: var(--space-8); overflow: hidden; }
+  .hero__text { grid-column: 1 / span 7; position: relative; z-index: 1; }
+  .display { font-size: var(--step-display); font-weight: var(--weight-light); line-height: var(--leading-display); letter-spacing: var(--tracking-display); margin: var(--space-5) 0 var(--space-6); }
+  .display span { color: var(--muted); }
+  .hero__lead { font-size: var(--step-lead); font-weight: var(--weight-light); max-width: 30ch; line-height: 1.4; margin: 0 0 var(--space-6); }
+  .hero__fig { position: absolute; inset: var(--nav-h) 0 0 40%; pointer-events: none; }
+  .hero__fig svg { width: 100%; height: 100%; }
+  .nav { position: absolute; inset: 0 0 auto 0; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad); border-bottom: var(--rule-w) solid var(--rule); z-index: 2; }
+  .nav img { height: 32px; }
+  .nav ul { display: flex; gap: var(--space-6); list-style: none; margin: 0; padding: 0; }
+
+  /* Buttons */
+  .btns { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: var(--space-4); height: 2.75rem; padding: 0 var(--space-2) 0 var(--space-4); font-family: var(--font-mono); font-size: var(--step-label); letter-spacing: var(--tracking-label); text-transform: uppercase; text-decoration: none; border: var(--rule-w) solid currentColor; color: inherit; }
+  .btn--solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .btn--solid .arrow { background: var(--ink); color: var(--paper); }
+  .btn--plain { padding-right: var(--space-4); }
+  .arrow { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; }
+  .stone .btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stone .btn--solid .arrow { background: var(--paper); color: var(--ink); }
+
+  /* Palette */
+  .swatches { display: grid; grid-template-columns: repeat(5, 1fr); border-top: var(--rule-w) solid var(--rule); }
+  .swatch { min-height: 26rem; padding: var(--space-5); display: flex; flex-direction: column; justify-content: space-between; }
+  .swatch h3 { font-size: var(--step-3); font-weight: var(--weight-light); margin: 0; }
+  .swatch dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: var(--space-1) var(--space-4); }
+  .swatch dt, .swatch dd { margin: 0; }
+  .head { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); margin-bottom: var(--space-8); }
+  .head .label { grid-column: 1 / span 4; padding-top: 0.6em; }
+  .head h2 { grid-column: 5 / span 8; font-size: var(--step-1); font-weight: var(--weight-light); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); margin: 0; }
+  .head h2 span { color: var(--olive-soft); }
+  .forest .head h2 span { color: var(--sage); }
+
+  /* Type scale */
+  .specimen { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); border-top: var(--rule-w) solid var(--rule); padding: var(--space-5) 0; align-items: baseline; }
+  .specimen .label { grid-column: 1 / span 4; }
+  .specimen > p { grid-column: 5 / span 8; margin: 0; }
+
+  /* Practice list on forest */
+  .list { grid-column: 5 / span 8; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--space-8); }
+  .list h3 { font-size: var(--step-3); font-weight: var(--weight-light); margin: 0 0 var(--space-5); }
+  .list ol { list-style: none; margin: 0; padding: 0; }
+  .list li { display: grid; grid-template-columns: 2.5rem 1fr; padding: var(--space-3) 0; border-top: var(--rule-w) solid var(--rule); font-size: var(--step-small); }
+  .list li .label { color: var(--sage); }
+
+  /* Closing with crop marks */
+  .closing { min-height: 70svh; display: grid; place-items: center; text-align: center; }
+  .closing h2 { font-size: var(--step-1); font-weight: var(--weight-light); line-height: var(--leading-heading); margin: 0 0 var(--space-6); }
+  .crop { position: absolute; width: 1.25rem; height: 1.25rem; }
+  .crop::before { content: ''; position: absolute; left: 50%; top: -15%; width: 1px; height: 130%; background: currentColor; transform-origin: center; }
+  .crop--tl { top: var(--space-7); left: var(--pad); } .crop--tl::before { transform: rotate(-45deg); }
+  .crop--tr { top: var(--space-7); right: var(--pad); } .crop--tr::before { transform: rotate(45deg); }
+  .crop--bl { bottom: var(--space-7); left: var(--pad); } .crop--bl::before { transform: rotate(45deg); }
+  .crop--br { bottom: var(--space-7); right: var(--pad); } .crop--br::before { transform: rotate(-45deg); }
+  .crop--t { top: var(--space-7); left: 50%; } .crop--b { bottom: var(--space-7); left: 50%; }
+
+  /* Footer wordmark */
+  .wordmark { font-size: clamp(3rem, 1rem + 9vw, 10rem); font-weight: var(--weight-light); letter-spacing: 0.08em; text-transform: uppercase; line-height: 0.9; margin: var(--space-8) 0 0; }
+  .wordmark span { white-space: nowrap; }
+  .foot { display: flex; justify-content: space-between; border-top: var(--rule-w) solid var(--rule); padding-top: var(--space-4); margin-top: var(--space-6); }
+
+  @media (max-width: 760px) {
+    .hero__text, .head .label, .head h2, .specimen .label, .specimen > p, .list { grid-column: 1 / -1; }
+    .head .label { margin-bottom: var(--space-4); }
+    .hero { grid-template-rows: 1fr auto; }
+    .hero__fig { position: relative; inset: auto; grid-column: 1 / -1; height: 44svh; margin: 0 calc(var(--pad) * -1) var(--space-5); }
+    .wordmark { font-size: 17vw; }
+    .nav ul { display: none; }
+    .swatches { grid-template-columns: 1fr; }
+    .swatch { min-height: 12rem; }
+    .list { grid-template-columns: 1fr; row-gap: var(--space-7); }
+  }
+</style>
+</head>
+<body>
+
+<section class="band ink hero">
+  <header class="nav">
+    <img src="../_source/images/LOGO.png" alt="Sáenz Valiente & Asociados">
+    <ul class="label"><li>Estudio</li><li>Áreas</li><li>Equipo</li><li>Carrera</li><li>Contacto</li></ul>
+  </header>
+  <div class="hero__fig" aria-hidden="true">
+    <svg viewBox="0 0 800 800" fill="none" stroke="currentColor" stroke-width="1">
+      <g opacity="0.35">
+        <circle cx="400" cy="330" r="190" stroke-dasharray="3 6"/>
+        <line x1="210" y1="140" x2="560" y2="760"/>
+        <line x1="320" y1="140" x2="470" y2="760"/>
+        <line x1="120" y1="520" x2="780" y2="520"/>
+        <line x1="400" y1="40" x2="400" y2="780" stroke-dasharray="2 8"/>
+      </g>
+      <g opacity="0.6">
+        <line x1="760" y1="80" x2="760" y2="740"/>
+        <line x1="752" y1="160" x2="768" y2="160"/><line x1="752" y1="380" x2="768" y2="380"/><line x1="752" y1="700" x2="768" y2="700"/>
+      </g>
+      <g fill="currentColor" stroke="none" font-family="Geist Mono Variable, monospace" font-size="11" letter-spacing="1.5" opacity="0.7">
+        <text x="700" y="164">1912</text><text x="700" y="384">1946</text><text x="706" y="704">HOY</text>
+        <text x="430" y="70">FIG. 01 — SVyA</text><text x="430" y="86" opacity="0.6">TRAZADO DEL MONOGRAMA</text>
+      </g>
+    </svg>
+  </div>
+  <div class="hero__text">
+    <p class="label soft">Estudio jurídico · Buenos Aires</p>
+    <h1 class="display">Derecho empresario <span>desde 1946</span></h1>
+    <p class="hero__lead">Asesoramos a empresas nacionales y extranjeras y a entidades del sector público.</p>
+    <div class="btns">
+      <a class="btn btn--solid" href="#">Áreas de práctica <span class="arrow">→</span></a>
+      <a class="btn btn--plain" href="#">Contacto</a>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="head"><p class="label soft">Hoja de estilo — Color</p><h2>Tinta, bosque y papel. <span>Cinco planos, sin sombras.</span></h2></div>
+  <div class="swatches">
+    <div class="swatch ink"><h3>Tinta</h3><dl class="label"><dt>Hex</dt><dd>#1D1D1B</dd><dt>Papel</dt><dd>14.4 : 1</dd><dt class="soft">Muted</dt><dd class="soft">6.7 : 1</dd></dl></div>
+    <div class="swatch" style="background:var(--graphite);color:var(--paper)"><h3>Grafito</h3><dl class="label"><dt>Hex</dt><dd>#262624</dd><dt>Papel</dt><dd>12.9 : 1</dd><dt style="color:var(--muted)">Muted</dt><dd style="color:var(--muted)">6.0 : 1</dd></dl></div>
+    <div class="swatch forest"><h3>Bosque</h3><dl class="label"><dt>Hex</dt><dd>#2A3220</dd><dt>Papel</dt><dd>11.4 : 1</dd><dt class="soft">Salvia</dt><dd class="soft">5.9 : 1</dd></dl></div>
+    <div class="swatch" style="background:var(--paper);outline:1px solid var(--rule)"><h3>Papel</h3><dl class="label"><dt>Hex</dt><dd>#EDEDEA</dd><dt>Tinta</dt><dd>14.4 : 1</dd><dt class="soft">Oliva</dt><dd class="soft">5.9 : 1</dd></dl></div>
+    <div class="swatch stone"><h3>Piedra</h3><dl class="label"><dt>Hex</dt><dd>#D9D9D4</dd><dt>Tinta</dt><dd>11.9 : 1</dd><dt class="soft">Oliva</dt><dd class="soft">4.9 : 1</dd></dl></div>
+  </div>
+</section>
+
+<section class="band" style="padding-top:0">
+  <div class="head"><p class="label soft">Hoja de estilo — Tipografía</p><h2>Jost para la voz, <span>Geist Mono para las notas.</span></h2></div>
+  <div class="specimen"><p class="label soft">Display · 52→120 · Light</p><p style="font-size:var(--step-display);font-weight:300;line-height:.95;letter-spacing:var(--tracking-display)">Desde 1946</p></div>
+  <div class="specimen"><p class="label soft">Título 1 · 40→76 · Light</p><p style="font-size:var(--step-1);font-weight:300;line-height:1.1">Soluciones prácticas para cuestiones complejas.</p></div>
+  <div class="specimen"><p class="label soft">Título 2 · 28→44 · Light</p><p style="font-size:var(--step-2);font-weight:300;line-height:1.15">Dos frentes, un mismo criterio.</p></div>
+  <div class="specimen"><p class="label soft">Título 3 · 22→28 · Regular</p><p style="font-size:var(--step-3);line-height:1.2">Asesoramiento empresario</p></div>
+  <div class="specimen"><p class="label soft">Bajada · 18→24 · Light</p><p style="font-size:var(--step-lead);font-weight:300;line-height:1.4;max-width:var(--measure)">Asesoramos a empresas nacionales y extranjeras y a entidades del sector público.</p></div>
+  <div class="specimen"><p class="label soft">Texto · 16 · Regular</p><p style="line-height:var(--leading-body);max-width:var(--measure)">En 1946 el Dr. José María Sáenz Valiente fundó el Estudio para asesorar a empresas en materia laboral.</p></div>
+  <div class="specimen"><p class="label soft">Nota · Mono 12 · +14</p><p class="label">Fig. 02 — Luz sobre muro · 34°34′S 58°25′O</p></div>
+</section>
+
+<section class="band forest">
+  <div class="head"><p class="label soft">02 — Áreas de práctica</p><h2>Dos frentes, <span>un mismo criterio.</span></h2></div>
+  <div class="grid">
+    <div class="list">
+      <div><h3>Asesoramiento empresario</h3><ol><li><span class="label">01</span>Derecho laboral y administrativo</li><li><span class="label">02</span>Fusiones y adquisiciones</li><li><span class="label">03</span>Reestructuración de deudas y APE</li></ol></div>
+      <div><h3>Área contenciosa</h3><ol><li><span class="label">01</span>Litigios laborales y de la seguridad social</li><li><span class="label">02</span>Libertad de prensa</li><li><span class="label">03</span>Defensa de la competencia</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="band stone closing">
+  <span class="crop crop--tl"></span><span class="crop crop--t"></span><span class="crop crop--tr"></span>
+  <span class="crop crop--bl"></span><span class="crop crop--b"></span><span class="crop crop--br"></span>
+  <div>
+    <p class="label soft">04 — Carrera</p>
+    <h2>¿Quiere ser parte del equipo?</h2>
+    <a class="btn btn--solid" href="#">Enviar CV <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer class="band ink" style="padding-bottom:var(--space-6)">
+  <p class="label soft">Cnel. Marcelino E. Freyre 3650 · Piso 2 · C1425 · Buenos Aires</p>
+  <p class="wordmark"><span>Sáenz</span> <span>Valiente</span></p>
+  <div class="foot label soft"><span>© Sáenz Valiente &amp; Asociados</span><span>34°34′S 58°25′O</span></div>
+</footer>
+
+</body>
+</html>

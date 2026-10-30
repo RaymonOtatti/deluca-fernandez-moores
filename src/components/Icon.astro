@@ -1,0 +1,30 @@
+---
+// Line icons drawn in SVG (the Latin font subset has no arrow glyphs). Always decorative:
+// the control that holds one carries the accessible name.
+interface Props {
+  name: 'menu' | 'close' | 'arrow';
+  size?: number;
+}
+
+const { name, size = 20 } = Astro.props;
+---
+<svg
+  class={`icon icon--${name}`}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.25"
+  aria-hidden="true"
+  focusable="false"
+>
+  {name === 'menu' && <><path d="M3 9h18" /><path d="M3 15h18" /></>}
+  {name === 'close' && <><path d="M5 5l14 14" /><path d="M19 5 5 19" /></>}
+  {name === 'arrow' && <><path d="M4 12h15" /><path d="m13 6 6 6-6 6" /></>}
+</svg>
+
+<style>
+  .icon { flex: none; }
+  .icon path { vector-effect: non-scaling-stroke; }
+</style>

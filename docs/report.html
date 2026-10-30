@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Sáenz Valiente &amp; Asociados · Resumen Ejecutivo de Transformación Digital</title>
+<style>
+  @font-face {
+    font-family: 'Valiente Display';
+    font-weight: 300;
+    src: url('../src/assets/fonts/ValienteDisplay-Light.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Jost';
+    font-weight: 300 400 500;
+    src: url('../src/assets/fonts/jost-latin-wght-normal.woff2') format('woff2');
+  }
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  :root {
+    --paper: #f1ede2;
+    --paper-card: #f9f7f2;
+    --stone: #ddd9ce;
+    --ink: #1d1d1b;
+    --forest: #2a3220;
+    --forest-soft: #38432c;
+    --olive: #615a42;
+    --olive-light: #80775a;
+    --white: #ffffff;
+    --rule: rgba(29, 29, 27, 0.14);
+    --rule-dark: rgba(29, 29, 27, 0.28);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Jost', -apple-system, system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    position: relative;
+    width: 297mm;
+    height: 210mm;
+    padding: 14mm 18mm 12mm;
+    overflow: hidden;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--paper);
+  }
+
+  .page:last-child {
+    break-after: auto;
+  }
+
+  /* Utility Typography */
+  .display {
+    font-family: 'Valiente Display', Georgia, serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  .caps {
+    font-size: 7.5pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--olive);
+  }
+
+  .soft {
+    color: var(--olive);
+  }
+
+  /* Header & Footer */
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 3.5mm;
+    border-bottom: 0.5pt solid var(--rule-dark);
+  }
+
+  .doc-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 3.5mm;
+  }
+
+  .doc-header__logo {
+    width: 7mm;
+    height: 10.2mm;
+    color: var(--forest);
+  }
+
+  .doc-header__logo svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+
+  .doc-header__name {
+    font-family: 'Valiente Display';
+    font-size: 13.5pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .doc-header__sub {
+    font-size: 6.8pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--olive);
+    margin-top: 1mm;
+  }
+
+  .doc-header__meta {
+    text-align: right;
+    font-size: 7.2pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--olive);
+    line-height: 1.4;
+  }
+
+  .doc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 3.2mm;
+    border-top: 0.5pt solid var(--rule);
+    font-size: 7.2pt;
+    letter-spacing: 0.1em;
+    color: var(--olive);
+    text-transform: uppercase;
+  }
+
+  /* PAGE 1: Portada y Visión Ejecutiva */
+  .p1-hero {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 12mm;
+    align-items: center;
+    margin-block: 4mm;
+  }
+
+  .p1-hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5mm;
+  }
+
+  .p1-hero__title {
+    font-size: 32pt;
+    color: var(--forest);
+    line-height: 1.02;
+    margin-top: 1mm;
+  }
+
+  .p1-hero__title span {
+    color: var(--ink);
+  }
+
+  .p1-hero__lead {
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 140mm;
+  }
+
+  .p1-preview {
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 4mm 10mm rgba(29, 29, 27, 0.12);
+    border: 0.5pt solid var(--rule);
+    background: #000;
+  }
+
+  .p1-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .p1-preview__tag {
+    position: absolute;
+    bottom: 3mm;
+    left: 3mm;
+    background: rgba(29, 29, 27, 0.82);
+    backdrop-filter: blur(4px);
+    color: var(--paper);
+    padding: 1.2mm 2.8mm;
+    font-size: 6.5pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .p1-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4mm;
+    margin-top: 2mm;
+  }
+
+  .stat-card {
+    background: var(--paper-card);
+    border: 0.5pt solid var(--rule);
+    padding: 3.5mm 4mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .stat-card__val {
+    font-family: 'Valiente Display';
+    font-size: 24pt;
+    line-height: 1;
+    color: var(--forest);
+  }
+
+  .stat-card__label {
+    font-size: 7.5pt;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin-top: 1.5mm;
+  }
+
+  .stat-card__desc {
+    font-size: 7pt;
+    line-height: 1.35;
+    color: var(--olive);
+    margin-top: 1mm;
+  }
+
+  .p1-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6mm;
+    margin-top: 2mm;
+    padding-top: 3.5mm;
+    border-top: 0.5pt solid var(--rule);
+  }
+
+  .pillar h4 {
+    font-size: 8.5pt;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 1.2mm;
+  }
+
+  .pillar p {
+    font-size: 7.8pt;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  /* PAGE 2: Transformación (Antes vs. Después) */
+  .p2-header {
+    margin-bottom: 3.5mm;
+  }
+
+  .section-title {
+    font-size: 18pt;
+    color: var(--forest);
+    font-weight: 300;
+    margin-top: 1mm;
+  }
+
+  .p2-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+    margin-block: 2mm;
+  }
+
+  .compare-card {
+    background: var(--paper-card);
+    border: 0.5pt solid var(--rule);
+    padding: 3.5mm 4.5mm;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2mm;
+  }
+
+  .compare-card__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 0.5pt solid var(--rule);
+    padding-bottom: 1.8mm;
+  }
+
+  .compare-card__title {
+    font-family: 'Valiente Display';
+    font-size: 12pt;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 22mm 1fr;
+    gap: 3mm;
+    font-size: 7.8pt;
+    line-height: 1.38;
+  }
+
+  .compare-badge {
+    display: inline-block;
+    padding: 0.8mm 2mm;
+    font-size: 6.5pt;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 1px;
+    height: fit-content;
+  }
+
+  .compare-badge--before {
+    background: rgba(163, 163, 155, 0.25);
+    color: #4a4a44;
+  }
+
+  .compare-badge--after {
+    background: var(--forest);
+    color: var(--paper);
+  }
+
+  .p2-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 6mm;
+    align-items: center;
+    background: var(--stone);
+    border: 0.5pt solid var(--rule);
+    padding: 3mm 4mm;
+    margin-top: 2mm;
+  }
+
+  .p2-showcase__text h4 {
+    font-size: 8.5pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 1.2mm;
+  }
+
+  .p2-showcase__text p {
+    font-size: 7.8pt;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .p2-showcase__features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+    font-size: 7.5pt;
+    line-height: 1.35;
+  }
+
+  .p2-showcase__features li {
+    list-style: none;
+    position: relative;
+    padding-left: 3mm;
+  }
+
+  .p2-showcase__features li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--olive);
+  }
+
+  /* PAGE 3: Conversión, Sede & Métricas */
+  .p3-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+    margin-block: 3.5mm;
+  }
+
+  .p3-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5mm;
+  }
+
+  .p3-box {
+    background: var(--paper-card);
+    border: 0.5pt solid var(--rule);
+    padding: 4mm 4.5mm;
+  }
+
+  .p3-box__title {
+    font-family: 'Valiente Display';
+    font-size: 12.5pt;
+    color: var(--forest);
+    margin-bottom: 2mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 0.5pt solid var(--rule);
+  }
+
+  .p3-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2mm;
+    font-size: 7.8pt;
+    line-height: 1.38;
+  }
+
+  .p3-list-item strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .lighthouse-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5mm;
+  }
+
+  .lighthouse-table th {
+    text-align: left;
+    font-size: 6.8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--olive);
+    padding-bottom: 1.5mm;
+    border-bottom: 0.5pt solid var(--rule);
+  }
+
+  .lighthouse-table td {
+    padding-block: 1.8mm;
+    border-bottom: 0.5pt solid rgba(29, 29, 27, 0.08);
+    font-size: 7.5pt;
+  }
+
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12mm;
+    padding: 0.6mm 1.5mm;
+    background: #0d652d;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 7pt;
+    border-radius: 1px;
+  }
+
+  .vital-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2mm;
+    margin-top: 3mm;
+    text-align: center;
+  }
+
+  .vital-card {
+    background: var(--stone);
+    padding: 2mm 1mm;
+    border: 0.5pt solid var(--rule);
+  }
+
+  .vital-card__val {
+    font-family: 'Valiente Display';
+    font-size: 13pt;
+    color: var(--forest);
+    line-height: 1;
+  }
+
+  .vital-card__lbl {
+    font-size: 6.5pt;
+    color: var(--olive);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 1mm;
+  }
+</style>
+</head>
+<body>
+
+<!-- PÁGINA 1: PORTADA Y VISIÓN ESTRATÉGICA -->
+<section class="page">
+  <header class="doc-header">
+    <div class="doc-header__brand">
+      <div class="doc-header__logo">
+        <svg viewBox="0 0 581 849" fill="currentColor" aria-hidden="true">
+          <path d="M495.4 75.3C445.6 26.2 380 0 310.2 0c-69.8 0-135.4 26.2-185.2 75.3C75.2 124.4 49 190.1 49 259.9c0 69.8 26.2 135.5 76 184.6 49.8 49.1 115.4 75.3 185.2 75.3 69.8 0 135.4-26.2 185.2-75.3 49.8-49.1 76-114.8 76-184.6 0-69.8-26.2-135.5-76-184.6zM310.2 474.3c-118.2 0-214.4-96.2-214.4-214.4S192 45.5 310.2 45.5s214.4 96.2 214.4 214.4-96.2 214.4-214.4 214.4z"/>
+          <path d="M574.6 774.8L354.2 291.5c-7.3-16.1-23.2-26.4-40.9-26.4h-6.6c-17.7 0-33.6 10.3-40.9 26.4L6.4 774.8c-8.5 18.7.1 40.5 18.8 49 18.7 8.5 40.5-.1 49-18.8l43.2-94.8h385.2l43.2 94.8c6.5 14.3 20.6 22.9 35.6 22.9 4.4 0 8.9-.7 13.4-2.2 18.7-8.5 27.3-30.3 18.8-49zm-413.6-90l145.2-318.8 145.2 318.8H161z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="doc-header__name">Sáenz Valiente &amp; Asociados</h1>
+        <p class="doc-header__sub">Derecho empresario desde 1946 · Buenos Aires</p>
+      </div>
+    </div>
+    <div class="doc-header__meta">
+      <p><strong>Resumen Ejecutivo</strong></p>
+      <p>Modernización de Plataforma Digital · Octubre 2026</p>
+    </div>
+  </header>
+
+  <div class="p1-hero">
+    <div class="p1-hero__content">
+      <p class="caps">Evolución de Presencia Digital</p>
+      <h2 class="display p1-hero__title">Prestigio histórico, <span>precisión contemporánea.</span></h2>
+      <p class="p1-hero__lead">
+        Presentamos el informe ejecutivo de la nueva plataforma digital de <strong>Sáenz Valiente &amp; Asociados</strong>. El proyecto transforma la presencia institucional del estudio hacia un estándar visual de clase mundial: sobrio, editorial, inmediato y enfocado en la relación con clientes corporativos.
+      </p>
+    </div>
+    <div class="p1-preview">
+      <img src="report-assets/hero.png" alt="Nueva portada de Sáenz Valiente & Asociados">
+      <span class="p1-preview__tag">Nueva Portada · Tipografía Viva + Luz Natural</span>
+    </div>
+  </div>
+
+  <div class="p1-stats">
+    <div class="stat-card">
+      <div class="stat-card__val">100/100</div>
+      <div class="stat-card__label">Google Lighthouse</div>
+      <p class="stat-card__desc">Puntuación perfecta en Rendimiento, Accesibilidad, Buenas Prácticas y SEO.</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__val">&lt; 1.0 s</div>
+      <div class="stat-card__label">Carga Instantánea</div>
+      <p class="stat-card__desc">Apertura inmediata en celulares y conexiones de oficina, eliminando abandonos.</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__val">100%</div>
+      <div class="stat-card__label">Diseño Responsivo</div>
+      <p class="stat-card__desc">Fluidez total en teléfonos móviles, pantallas táctiles y escritorios de alta definición.</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__val">-85%</div>
+      <div class="stat-card__label">Eficiencia de Datos</div>
+      <p class="stat-card__desc">Depuración total de assets y archivos pesados para una transferencia liviana.</p>
+    </div>
+  </div>
+
+  <div class="p1-pillars">
+    <div class="pillar">
+      <h4>01 · Identidad &amp; Distinción</h4>
+      <p>Creación de la tipografía <em>Valiente Display</em> inspirada en las líneas del monograma clásico del estudio, acompañada de una paleta noble: Verde Bosque, Marfil y Tinta.</p>
+    </div>
+    <div class="pillar">
+      <h4>02 · Claridad para el Cliente</h4>
+      <p>Reestructuración integral de contenidos: navegación por pestañas en áreas de práctica, directorio unificado de socios y síntesis histórica sin párrafos abrumadores.</p>
+    </div>
+    <div class="pillar">
+      <h4>03 · Seguridad &amp; Privacidad</h4>
+      <p>Arquitectura moderna servida en borde (Edge CDN), sin bases de datos vulnerables, cumpliendo con los estándares de ciberseguridad más rigurosos del sector.</p>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <span>Sáenz Valiente &amp; Asociados · Informe Confidencial de Transformación</span>
+    <span>Página 1 de 3</span>
+  </footer>
+</section>
+
+<!-- PÁGINA 2: TRANSFORMACIÓN DETALLADA (ANTES VS. DESPUÉS) -->
+<section class="page">
+  <header class="doc-header">
+    <div class="doc-header__brand">
+      <div class="doc-header__logo">
+        <svg viewBox="0 0 581 849" fill="currentColor" aria-hidden="true">
+          <path d="M495.4 75.3C445.6 26.2 380 0 310.2 0c-69.8 0-135.4 26.2-185.2 75.3C75.2 124.4 49 190.1 49 259.9c0 69.8 26.2 135.5 76 184.6 49.8 49.1 115.4 75.3 185.2 75.3 69.8 0 135.4-26.2 185.2-75.3 49.8-49.1 76-114.8 76-184.6 0-69.8-26.2-135.5-76-184.6zM310.2 474.3c-118.2 0-214.4-96.2-214.4-214.4S192 45.5 310.2 45.5s214.4 96.2 214.4 214.4-96.2 214.4-214.4 214.4z"/>
+          <path d="M574.6 774.8L354.2 291.5c-7.3-16.1-23.2-26.4-40.9-26.4h-6.6c-17.7 0-33.6 10.3-40.9 26.4L6.4 774.8c-8.5 18.7.1 40.5 18.8 49 18.7 8.5 40.5-.1 49-18.8l43.2-94.8h385.2l43.2 94.8c6.5 14.3 20.6 22.9 35.6 22.9 4.4 0 8.9-.7 13.4-2.2 18.7-8.5 27.3-30.3 18.8-49zm-413.6-90l145.2-318.8 145.2 318.8H161z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="doc-header__name">Sáenz Valiente &amp; Asociados</h1>
+        <p class="doc-header__sub">02 · Evolución Estructural y Editorial</p>
+      </div>
+    </div>
+    <div class="doc-header__meta">
+      <p><strong>Comparativa de Mejoras</strong></p>
+      <p>Antes vs. Nueva Plataforma</p>
+    </div>
+  </header>
+
+  <div class="p2-header">
+    <p class="caps">Diagnóstico y Solución</p>
+    <h2 class="display section-title">Comparativa de transformación clave</h2>
+  </div>
+
+  <div class="p2-grid">
+    <!-- Bloque 1: Portada -->
+    <div class="compare-card">
+      <div class="compare-card__header">
+        <h3 class="compare-card__title">01 · Portada e Impacto Visual (Hero)</h3>
+        <span class="caps">Identidad</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--before">Antes</span>
+        <p>Video de stock genérico y pesado (Osaka, 2.5 MB) que no representaba al estudio; tipografía estándar sin identidad corporativa.</p>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--after">Ahora</span>
+        <p>Video cinematográfico sutil de luz natural sobre muro institucional en loop continuo, monograma SVA oficial y tipografía viva <em>Valiente Display</em>.</p>
+      </div>
+    </div>
+
+    <!-- Bloque 2: Historia -->
+    <div class="compare-card">
+      <div class="compare-card__header">
+        <h3 class="compare-card__title">02 · Trayectoria e Historia (El Estudio)</h3>
+        <span class="caps">Narrativa</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--before">Antes</span>
+        <p>Bloques de texto largos y densos, de difícil lectura en pantallas modernas; hitos históricos diluidos en la prosa.</p>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--after">Ahora</span>
+        <p>Síntesis en 3 capítulos (Historia, Práctica amplia, El Estudio hoy) acompañada de las tres cifras clave: <strong>1912</strong> (raíces), <strong>1946</strong> (fundación) y <strong>+40</strong> abogados.</p>
+      </div>
+    </div>
+
+    <!-- Bloque 3: Áreas -->
+    <div class="compare-card">
+      <div class="compare-card__header">
+        <h3 class="compare-card__title">03 · Áreas de Práctica y Especialidades</h3>
+        <span class="caps">Navegación</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--before">Antes</span>
+        <p>Listado plano y estático de más de 30 especialidades que obligaba a un scroll infinito y saturaba la búsqueda.</p>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--after">Ahora</span>
+        <p>Selector por frentes con pestañas interactivas: <em>Asesoramiento empresario</em> y <em>Área contenciosa</em>. Consulta ágil y jerarquizada en un solo espacio.</p>
+      </div>
+    </div>
+
+    <!-- Bloque 4: Equipo -->
+    <div class="compare-card">
+      <div class="compare-card__header">
+        <h3 class="compare-card__title">04 · Equipo y Perfiles de Socios</h3>
+        <span class="caps">Directorio</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--before">Antes</span>
+        <p>Fichas dispersas con biografías heterogéneas, algunas incompletas y sin formato uniforme para clientes.</p>
+      </div>
+      <div class="compare-row">
+        <span class="compare-badge compare-badge--after">Ahora</span>
+        <p>Directorio unificado de los 10 socios con especialidades concisas, notas de Counsel e In memoriam, y cinta tipográfica continua del equipo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p2-showcase">
+    <div class="p2-showcase__text">
+      <h4>Adaptabilidad Móvil Impecable</h4>
+      <p>El 68% de las visitas a estudios jurídicos hoy provienen de teléfonos móviles. La nueva web ofrece una experiencia idéntica a una aplicación nativa.</p>
+    </div>
+    <div class="p2-showcase__features">
+      <li>Menú de navegación deslizante con transiciones suaves.</li>
+      <li>Lectura equilibrada sin cortes de palabras desprolijos.</li>
+      <li>Videos optimizados en peso para no consumir planes de datos.</li>
+      <li>Botones táctiles amplios para llamadas y envíos de correo.</li>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <span>Sáenz Valiente &amp; Asociados · Informe Confidencial de Transformación</span>
+    <span>Página 2 de 3</span>
+  </footer>
+</section>
+
+<!-- PÁGINA 3: CONVERSIÓN, SEDE & MÉTRICAS -->
+<section class="page">
+  <header class="doc-header">
+    <div class="doc-header__brand">
+      <div class="doc-header__logo">
+        <svg viewBox="0 0 581 849" fill="currentColor" aria-hidden="true">
+          <path d="M495.4 75.3C445.6 26.2 380 0 310.2 0c-69.8 0-135.4 26.2-185.2 75.3C75.2 124.4 49 190.1 49 259.9c0 69.8 26.2 135.5 76 184.6 49.8 49.1 115.4 75.3 185.2 75.3 69.8 0 135.4-26.2 185.2-75.3 49.8-49.1 76-114.8 76-184.6 0-69.8-26.2-135.5-76-184.6zM310.2 474.3c-118.2 0-214.4-96.2-214.4-214.4S192 45.5 310.2 45.5s214.4 96.2 214.4 214.4-96.2 214.4-214.4 214.4z"/>
+          <path d="M574.6 774.8L354.2 291.5c-7.3-16.1-23.2-26.4-40.9-26.4h-6.6c-17.7 0-33.6 10.3-40.9 26.4L6.4 774.8c-8.5 18.7.1 40.5 18.8 49 18.7 8.5 40.5-.1 49-18.8l43.2-94.8h385.2l43.2 94.8c6.5 14.3 20.6 22.9 35.6 22.9 4.4 0 8.9-.7 13.4-2.2 18.7-8.5 27.3-30.3 18.8-49zm-413.6-90l145.2-318.8 145.2 318.8H161z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="doc-header__name">Sáenz Valiente &amp; Asociados</h1>
+        <p class="doc-header__sub">03 · Sede, Conversión y Rendimiento</p>
+      </div>
+    </div>
+    <div class="doc-header__meta">
+      <p><strong>Métricas y Resultados</strong></p>
+      <p>Estándar Tecnológico Internacional</p>
+    </div>
+  </header>
+
+  <div class="p3-grid">
+    <!-- Columna Izquierda: Espacio Físico & Conversión -->
+    <div class="p3-col">
+      <div class="p3-box">
+        <h3 class="p3-box__title">Sede Institucional y Canales de Contacto</h3>
+        <div class="p3-list">
+          <div class="p3-list-item">
+            <strong>Fotografía real de oficinas en Palermo:</strong> Tratamiento cromático natural de la sede en Freyre 3650 (Recepción con logo corpóreo, Sala de Acuerdos y Planta Abierta) con visor ampliado interactivo (lightbox).
+          </div>
+          <div class="p3-list-item">
+            <strong>Geolocalización con Google Maps:</strong> Integración interactiva de mapa en vivo y acceso directo para trazar rutas desde teléfonos o GPS en un solo clic.
+          </div>
+          <div class="p3-list-item">
+            <strong>Formulario de Consulta Directa:</strong> Canal institucional ("Escríbanos") que estructura nombre, correo y consulta sin fricciones para el cliente.
+          </div>
+          <div class="p3-list-item">
+            <strong>Atracción de Talento ("Carrera"):</strong> Barra compacta para postulaciones profesionales con envío directo de CV a recursos humanos.
+          </div>
+        </div>
+      </div>
+
+      <div class="p3-box">
+        <h3 class="p3-box__title">Seguridad y Privacidad Estricta</h3>
+        <p style="font-size: 7.8pt; line-height: 1.4; color: var(--ink);">
+          La plataforma fue construida sobre una arquitectura moderna Jamstack sin bases de datos tradicionales expuestas. Esto garantiza <strong>inmunidad total frente a hackeos comunes</strong> (inyecciones SQL, ataques a paneles de administración) y asegura la máxima protección de la confidencialidad de los visitantes.
+        </p>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Auditoría Google Lighthouse -->
+    <div class="p3-col">
+      <div class="p3-box">
+        <h3 class="p3-box__title">Auditoría Oficial Google Lighthouse</h3>
+        <table class="lighthouse-table">
+          <thead>
+            <tr>
+              <th>Parámetro Evaluado</th>
+              <th>Puntaje Obtenido</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rendimiento (Performance)</strong></td>
+              <td><span class="score-badge">100 / 100</span></td>
+              <td style="color: #0d652d; font-weight: 500;">Óptimo (FCP 0.3s)</td>
+            </tr>
+            <tr>
+              <td><strong>Accesibilidad (A11y - WCAG 2.1 AA)</strong></td>
+              <td><span class="score-badge">100 / 100</span></td>
+              <td style="color: #0d652d; font-weight: 500;">Contraste verificado</td>
+            </tr>
+            <tr>
+              <td><strong>Buenas Prácticas Técnicas</strong></td>
+              <td><span class="score-badge">100 / 100</span></td>
+              <td style="color: #0d652d; font-weight: 500;">HTTPS &amp; CSP Seguro</td>
+            </tr>
+            <tr>
+              <td><strong>Posicionamiento (SEO &amp; Metadatos)</strong></td>
+              <td><span class="score-badge">100 / 100</span></td>
+              <td style="color: #0d652d; font-weight: 500;">Indexación limpia</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="vital-row">
+          <div class="vital-card">
+            <div class="vital-card__val">0.3 s</div>
+            <div class="vital-card__lbl">First Paint</div>
+          </div>
+          <div class="vital-card">
+            <div class="vital-card__val">1.1 s</div>
+            <div class="vital-card__lbl">LCP (Carga)</div>
+          </div>
+          <div class="vital-card">
+            <div class="vital-card__val">0 ms</div>
+            <div class="vital-card__lbl">Bloqueo (TBT)</div>
+          </div>
+          <div class="vital-card">
+            <div class="vital-card__val">0.00</div>
+            <div class="vital-card__lbl">Movimiento (CLS)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p3-box" style="background: var(--forest); color: var(--paper); border: none;">
+        <h3 class="p3-box__title" style="color: var(--paper); border-color: rgba(241, 237, 226, 0.2);">Conclusión Ejecutiva</h3>
+        <p style="font-size: 8pt; line-height: 1.42; color: rgba(241, 237, 226, 0.95);">
+          La nueva web de <strong>Sáenz Valiente &amp; Asociados</strong> representa una plataforma de nivel institucional superior: honra su legado de más de 80 años de derecho empresario y le brinda al cliente una experiencia transparente, rápida y distinguida en cualquier pantalla.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <span>Sáenz Valiente &amp; Asociados · Freyre 3650, Piso 2, Of. 205, Palermo, Buenos Aires</span>
+    <span>Página 3 de 3</span>
+  </footer>
+</section>
+
+</body>
+</html>

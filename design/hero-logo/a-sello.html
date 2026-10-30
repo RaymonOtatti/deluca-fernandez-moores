@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- The original SVA monogram sits above the live name as one centred, quiet seal on the firm's paper image. At 1440 × 900 the mark is 189 px (21vh), the name 44 px and the gap 42 px; at 390 × 844 they become 148 px, 28 px and 32 px, keeping the identity calm and comfortably clear of the edges. -->
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Sáenz Valiente &amp; Asociados — Sello</title>
+  <style>
+    @font-face {
+      font-family: "Valiente Display";
+      src: url("../../src/assets/fonts/ValienteDisplay-Light.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Jost";
+      src: url("../../src/assets/fonts/jost-latin-wght-normal.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 400;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f1ede2;
+      --forest: #2a3220;
+      --sage: #a9b09a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--forest);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      place-items: center;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      padding: 24px;
+      color: var(--paper);
+    }
+
+    .hero__image {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 78% 30%;
+    }
+
+    .seal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(32px, 4.667vmin, 48px);
+      /* Lift the complete lockup slightly above the viewport's mathematical centre. */
+      translate: 0 -2vh;
+    }
+
+    .seal__mark {
+      display: block;
+      height: 21vh;
+      width: auto;
+      aspect-ratio: 581 / 849;
+      flex: none;
+      /* The S carries more ink on the left; move the unchanged silhouette right. */
+      translate: 4% 0;
+    }
+
+    .seal__name {
+      width: max-content;
+      margin: 0;
+      font-family: "Valiente Display", serif;
+      font-size: clamp(28px, 3.056vw, 44px);
+      font-weight: 300;
+      font-synthesis: none;
+      line-height: 1.2;
+    }
+
+    .seal__primary {
+      display: block;
+      letter-spacing: 0.08em;
+      /* Remove the final tracking space from the visible name's alignment. */
+      margin-right: -0.08em;
+      white-space: nowrap;
+    }
+
+    .seal__secondary {
+      display: block;
+      width: max-content;
+      margin: 12px -0.22em 0 auto;
+      color: var(--sage);
+      font-family: "Jost", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0.22em;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .seal { gap: 32px; }
+      .seal__mark { height: min(148px, 21vh); }
+      .seal__name { font-size: clamp(20px, 7.18vw, 32px); }
+      .seal__secondary { margin-top: 10px; }
+    }
+
+    @media (max-height: 480px) {
+      .seal { gap: 20px; }
+      .seal__name { font-size: min(28px, 7.18vw); }
+      .seal__secondary { margin-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero" aria-labelledby="firm-name">
+    <img class="hero__image" src="../../src/assets/art/fig-01-papel.jpg" width="2400" height="1500" alt="" fetchpriority="high">
+    <div class="seal">
+      <svg class="seal__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 581 849" fill="currentColor" aria-hidden="true" focusable="false">
+        <path transform="translate(0,849) scale(0.1,-0.1)" d="M1165 8404 c-249 -34 -387 -71 -530 -142 -348 -172 -529 -464 -529 -852 1 -513 296 -838 1204 -1319 457 -243 731 -447 905 -675 227 -299 254 -661 69 -948 -59 -93 -200 -227 -218 -207 -2 2 -123 285 -269 629 -146 344 -271 637 -278 653 l-12 27 -265 0 c-247 0 -264 -1 -259 -17 2 -10 143 -339 312 -732 209 -485 304 -716 297 -723 -19 -19 -402 -3 -525 21 -332 67 -593 207 -834 448 -76 75 -123 116 -123 105 0 -9 -7 -75 -15 -147 -8 -71 -15 -140 -15 -152 0 -19 17 -32 98 -72 384 -192 830 -294 1271 -290 l194 2 588 -1368 c324 -753 593 -1373 598 -1378 4 -4 26 -7 47 -5 l38 3 112 260 111 260 732 3 731 2 10 -22 c5 -13 57 -158 114 -323 138 -397 474 -1344 482 -1356 6 -10 524 -13 524 -3 0 3 -353 932 -785 2064 l-784 2060 83 197 c131 311 344 779 472 1036 l64 128 -116 -3 -116 -3 -53 -160 c-145 -443 -533 -1419 -1060 -2665 -108 -256 -233 -552 -277 -658 -54 -128 -84 -188 -90 -179 -15 28 -949 2230 -946 2232 2 2 44 23 93 48 634 319 820 1053 407 1607 -188 253 -486 467 -1092 785 -753 396 -994 662 -994 1100 -1 445 314 672 906 652 440 -15 792 -190 1024 -511 l22 -30 5 30 c3 16 11 79 17 139 6 61 13 124 15 141 5 30 4 31 -102 82 -341 161 -607 222 -993 227 -129 2 -248 1 -265 -1z m3083 -5639 c171 -473 313 -868 317 -877 7 -17 -30 -18 -689 -18 -383 0 -696 4 -696 9 0 4 74 181 163 392 90 211 258 607 373 880 115 273 212 492 216 485 3 -6 146 -398 316 -871z"/>
+      </svg>
+      <h1 class="seal__name" id="firm-name"><span class="seal__primary">SÁENZ VALIENTE</span> <span class="seal__secondary">&amp; ASOCIADOS</span></h1>
+    </div>
+  </main>
+</body>
+</html>

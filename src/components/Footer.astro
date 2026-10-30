@@ -1,0 +1,197 @@
+---
+// Footer and contact: compact, symmetrical 5-column layout on aligned top hairlines.
+import { contact } from '../content/contact.ts';
+import { nav } from '../content/nav.ts';
+import { site } from '../content/site.ts';
+import { mailHref, telHref } from '../lib/links.ts';
+import dfmIsologo from '../assets/brand/dfm-nav-isologo.svg?raw';
+
+const year = new Date().getFullYear();
+interface Props { linkBase?: string }
+const { linkBase = '' } = Astro.props;
+---
+<footer id="contacto" class="footer band band--ink" aria-label="Pie de página con ubicación y datos del estudio">
+  <div class="footer__top">
+    <section class="footer__map-panel reveal line-top" aria-labelledby="footer-map-title">
+      <h2 id="footer-map-title" class="label soft footer__map-label">Ubicación</h2>
+      <a class="footer__map-link" href={contact.map} target="_blank" rel="noopener noreferrer">
+        <span>{contact.address.street}, {contact.address.unit}</span>
+        <span class="footer__map-action">Abrir en Google Maps <span aria-hidden="true">↗</span></span>
+        <span class="visually-hidden"> (se abre en una pestaña nueva)</span>
+      </a>
+    </section>
+
+    <nav class="footer__site-map reveal line-top" aria-labelledby="footer-site-map-title">
+      <h3 id="footer-site-map-title" class="label soft">Mapa del sitio</h3>
+      <ul role="list">
+        <li><a href={linkBase || '/'}>Inicio</a></li>
+        {nav.map((item) => <li><a href={linkBase + item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <dl class="footer__cols stagger">
+      <div class="reveal line-top">
+        <dt class="label soft">Teléfonos</dt>
+        {contact.phones.map((p) => <dd><a href={telHref(p)}>{p}</a></dd>)}
+      </div>
+      <div class="reveal line-top">
+        <dt class="label soft">Correo</dt>
+        {contact.emails.map((e) => <dd><a href={mailHref(e.address)}>{e.address}</a></dd>)}
+      </div>
+    </dl>
+  </div>
+
+  <div class="footer__bottom label soft line-top">
+    <span class="footer__wordmark" role="img" aria-label={site.name} set:html={dfmIsologo} />
+    <span>© {year}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-top: clamp(3.5rem, 4vw, 5rem);
+    padding-bottom: clamp(2rem, 3vw, 3rem);
+    font-family: var(--font-sans);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+
+  .footer__map-panel {
+    grid-column: span 3;
+    padding-top: var(--space-3);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+  .footer__map-link {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    font-size: var(--step-small);
+    line-height: 1.5;
+    text-decoration: none;
+  }
+  .footer__map-link > span:first-child { color: var(--fg); }
+  .footer__map-action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+    color: var(--accent);
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out);
+  }
+  .footer__map-link:hover .footer__map-action {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--ink);
+  }
+  .footer__map-label {
+    margin-bottom: var(--space-3);
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  .footer__site-map {
+    grid-column: span 3;
+    padding-top: var(--space-3);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+  .footer__site-map h3 {
+    margin: 0 0 var(--space-3);
+    text-align: left;
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  .footer__site-map ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+  }
+  .footer__site-map a {
+    display: inline-block;
+    font-size: var(--step-small);
+    line-height: 1.6;
+    text-decoration: none;
+    white-space: nowrap;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) { .footer__site-map a:hover { background-size: 100% 1px; } }
+
+  .footer__cols {
+    grid-column: span 6;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+  .footer__cols > div {
+    padding-top: var(--space-3);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+  .footer__cols dt {
+    margin-bottom: var(--space-3);
+    text-align: left;
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  .footer__cols dd {
+    margin: 0;
+    font-size: var(--step-small);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+  .footer__cols dd a { display: inline-block; }
+  .footer__cols a {
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) {
+    .footer__cols a:hover { background-size: 100% 1px; }
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2) var(--space-6);
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: var(--rule-w) solid var(--rule);
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+  }
+  .footer__wordmark {
+    display: block;
+    width: clamp(10rem, 15vw, 12rem);
+    color: var(--soft);
+  }
+  .footer__wordmark :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 1099px) {
+    .footer__top { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: var(--space-5); }
+    .footer__map-panel, .footer__site-map { grid-column: span 3; }
+    .footer__cols { grid-column: 1 / -1; }
+  }
+  @media (max-width: 699px) {
+    .footer__top { grid-template-columns: 1fr; row-gap: var(--space-5); }
+    .footer__map-panel, .footer__site-map { grid-column: 1 / -1; }
+    .footer__site-map ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem var(--space-4); }
+    .footer__cols { grid-column: 1 / -1; grid-template-columns: 1fr; row-gap: var(--space-5); }
+  }
+</style>

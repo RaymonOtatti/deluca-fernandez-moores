@@ -1,0 +1,62 @@
+<!doctype html><html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Specimen for Valiente Display Light (6.8), set against the Jost Light wordmark it would replace.
+     Serve the repo root (e.g. python -m http.server 4399 --bind 127.0.0.1) and open /design/font/specimen.html. -->
+<title>Valiente Display: specimen</title>
+<link rel="stylesheet" href="../../node_modules/@fontsource-variable/jost/wght.css">
+<link rel="stylesheet" href="../../node_modules/@fontsource-variable/geist-mono/wght.css">
+<link rel="stylesheet" href="../../src/styles/tokens.css">
+<style>
+  @font-face { font-family: 'Valiente Display'; src: url(build/ValienteDisplay-Light.woff2) format('woff2'); font-weight: 300; }
+  html { background: var(--paper); color: var(--ink); font-family: var(--font-sans); }
+  body { margin: 0; }
+  section { padding: 56px 40px; container-type: inline-size; }
+  .dark { background: var(--forest); color: var(--paper); }
+  .label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 20px; opacity: 0.7; }
+  .mark { margin: 0; font-weight: 300; line-height: 0.9; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+  .mark > span { display: inline-block; }
+  .fit { width: max-content; }
+  .detail { font-family: 'Valiente Display'; font-weight: 300; font-size: 300px; line-height: 1.15; letter-spacing: 0.04em; margin: 0; }
+  .new { font-family: 'Valiente Display', serif; }
+  .old { font-family: 'Jost Variable'; }
+  .row { display: flex; flex-wrap: wrap; gap: 0 8%; align-items: baseline; }
+  .num { font-family: 'Valiente Display'; font-weight: 300; font-size: clamp(2.5rem, 1.75rem + 3.33vw, 4.75rem); line-height: 1.1; margin: 0; }
+  .num.big { font-size: 160px; }
+  .set { font-family: 'Valiente Display'; font-weight: 300; font-size: 88px; line-height: 1.25; letter-spacing: 0.08em; margin: 0; overflow-wrap: anywhere; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  @media (max-width: 899px) { .mark { display: grid; } .detail { font-size: 120px; } .set { font-size: 52px; } .pair { grid-template-columns: 1fr; } .num.big { font-size: 96px; } }
+</style>
+</head><body>
+<section class="dark">
+  <p class="label">Valiente Display Light · new</p>
+  <p class="mark new fit"><span>Sáenz</span> <span>Valiente</span></p>
+</section>
+<section>
+  <p class="label">Jost Light · current</p>
+  <p class="mark old fit"><span>Sáenz</span> <span>Valiente</span></p>
+</section>
+<section>
+  <p class="label">The big numbers</p>
+  <div class="row"><p class="num">1912</p><p class="num">1946</p><p class="num">+40</p></div>
+  <div class="row"><p class="num big">1946</p><p class="num big">+40</p></div>
+</section>
+<section>
+  <p class="label">Detail</p>
+  <p class="detail">ÁNZ SGR</p>
+  <p class="detail">KMW 2346</p>
+</section>
+<section class="dark">
+  <p class="label">Character set</p>
+  <p class="set">ABCDEFGHIJKLM NOPQRSTUVWXYZ ÁÉÍÓÚÑ 0123456789 +.,·-–—</p>
+</section>
+<script>
+  // Fit each wordmark to its section's content width, as the site's container units do
+  document.fonts.ready.then(() => {
+    for (const el of document.querySelectorAll('.fit')) {
+      el.style.fontSize = '100px';
+      const w = el.parentElement.clientWidth - 80;
+      el.style.fontSize = (100 * w / el.getBoundingClientRect().width) + 'px';
+      el.dataset.ratio = (w / parseFloat(el.style.fontSize)).toFixed(2);
+    }
+  });
+</script>
+</body></html>

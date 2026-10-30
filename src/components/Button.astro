@@ -1,0 +1,60 @@
+---
+// Square button-link. Solid: inverted arrow square on the right. (The 1 px outline "plain" variant left
+// in 8.3b: nothing used it, and the stylesheet needed the bytes.)
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'solid';
+}
+
+const { href, variant = 'solid' } = Astro.props;
+---
+<a class:list={['button', 'label', `button--${variant}`]} href={href}>
+  <span><slot /></span>
+  {variant === 'solid' && <span class="button__arrow"><Icon name="arrow" size={16} /></span>}
+</a>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-4);
+    border: var(--rule-w) solid currentColor;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), scale 150ms ease-out;
+  }
+  .button--solid {
+    padding-right: var(--space-2);
+    background: var(--fg);
+    border-color: var(--fg);
+    color: var(--bg);
+  }
+  .button--solid:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .button__arrow {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: var(--bg);
+    color: var(--fg);
+    transition: transform var(--dur-ui) var(--ease-out);
+  }
+  .button--solid:hover .button__arrow {
+    background: var(--bg);
+    color: var(--accent);
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .button--solid:hover .button__arrow { transform: translateX(3px); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .button:active { scale: 0.96; }
+  }
+</style>

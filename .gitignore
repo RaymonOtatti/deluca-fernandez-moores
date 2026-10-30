@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.DS_Store
+_source/site/
+_source/reference/
+design/art/*.html
+design/font/.venv/
+design/map/osm/
+__pycache__/
+src/assets/art/hero/film.mp4
+src/assets/art/hero/film-two.mp4

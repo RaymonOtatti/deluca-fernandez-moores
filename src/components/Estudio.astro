@@ -1,0 +1,216 @@
+---
+// 01 — Quiénes somos (El Estudio): presentación institucional y fotografía de los socios.
+import { Picture } from 'astro:assets';
+import { estudio } from '../content/home.ts';
+import sociosJuntos from '../assets/team/socios-estudio.jpg';
+---
+<section id="quienes-somos" class="estudio band band--paper" aria-labelledby="estudio-title">
+  <!-- Legacy anchor for compatibility -->
+  <span id="estudio" class="anchor-target" aria-hidden="true"></span>
+
+  <div class="estudio__grid">
+    <div class="estudio__content">
+      <header class="estudio__head">
+        <h2 id="estudio-title" class="estudio__title">
+          {estudio.title[0]}
+        </h2>
+      </header>
+
+      <div class="estudio__intro" data-scroll-in>
+        {estudio.text.map((text) => <p class="estudio__lead soft">{text}</p>)}
+      </div>
+
+      <div class="estudio__story">
+        {estudio.story.map((s) => (
+          <div class="story__part line-top">
+            <h3 class="label soft story__title">{s.title}</h3>
+            <p class="story__text" data-scroll-in>{s.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="estudio__media">
+      <figure class="estudio__portrait">
+        <div class="estudio__portrait-frame">
+          <Picture
+            src={sociosJuntos}
+            formats={['avif', 'webp']}
+            widths={[400, 700, 1100]}
+            sizes="(min-width: 900px) 38vw, 92vw"
+            alt="Dr. Santiago Deluca y Dr. Gonzalo Fernández Moores en el estudio"
+            class="estudio__portrait-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption class="estudio__portrait-caption soft label">
+          <span>Dr. Santiago Deluca &amp; Dr. Gonzalo Fernández Moores</span>
+          <span>Socios Titulares · Deluca &amp; Fernández Moores</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .anchor-target {
+    position: absolute;
+    top: -2rem;
+    left: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .estudio {
+    position: relative;
+    padding-block: var(--section-y);
+  }
+
+  .estudio__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(var(--space-6), 4vw, var(--space-8));
+    align-items: start;
+  }
+
+  .estudio__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .estudio__title {
+    font-size: var(--step-1);
+    font-family: var(--font-editorial);
+    font-weight: 400;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+    max-width: 22em;
+    margin: 0;
+  }
+
+  .estudio__intro {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 100%;
+  }
+
+  .estudio__lead {
+    font-size: var(--step-lead);
+    line-height: var(--leading-body);
+    text-align: left;
+    margin: 0;
+  }
+
+  .estudio__story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin-top: var(--space-2);
+  }
+
+  .story__part {
+    padding-top: var(--space-4);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+
+  .story__title {
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2);
+  }
+
+  .story__text {
+    max-width: 100%;
+    font-size: var(--step-0);
+    line-height: var(--leading-body);
+    text-align: left;
+    margin: 0;
+  }
+
+  /* Media column: sticky partner photo with lens parallax */
+  .estudio__media {
+    position: sticky;
+    top: clamp(2rem, 5vw, 4.5rem);
+    display: flex;
+    justify-content: center;
+  }
+
+  .estudio__portrait {
+    margin: 0;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .estudio__portrait-frame {
+    width: 100%;
+    max-height: 520px;
+    aspect-ratio: 1103 / 1280;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    position: relative;
+  }
+
+  .estudio__portrait-frame :global(.estudio__portrait-img) {
+    width: 100%;
+    height: 115%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+    transform: translateY(-6%) scale(1.08);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .estudio__portrait-frame :global(.estudio__portrait-img) {
+        animation-name: estudio-portrait-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+
+  @keyframes estudio-portrait-parallax {
+    from {
+      transform: translateY(-7%) scale(1.08);
+    }
+    to {
+      transform: translateY(7%) scale(1.08);
+    }
+  }
+
+  .estudio__portrait-caption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 899px) {
+    .estudio__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-7);
+    }
+    .estudio__media {
+      position: static;
+      order: 2;
+    }
+    .estudio__portrait {
+      max-width: 100%;
+    }
+    .estudio__portrait-frame {
+      max-height: 480px;
+    }
+    .estudio__lead,
+    .story__text {
+      text-align: left;
+    }
+  }
+</style>

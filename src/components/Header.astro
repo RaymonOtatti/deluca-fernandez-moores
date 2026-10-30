@@ -1,0 +1,920 @@
+---
+// Site header: brand, main nav, and a menu (native popover) for small screens. The brand is the name
+// alone since 8.2 (Franco, 2026-10-23); the monogram stays in the favicon and the footer.
+import Icon from './Icon.astro';
+import { nav } from '../content/nav.ts';
+import { contact } from '../content/contact.ts';
+import { site } from '../content/site.ts';
+import { telHref } from '../lib/links.ts';
+import dfmIsologo from '../assets/brand/dfm-nav-isologo.svg?raw';
+
+interface Props {
+  /** "" on the home page; "/" where the header renders on another URL (the 404), so links lead home */
+  linkBase?: string;
+}
+
+const { linkBase = '' } = Astro.props;
+---
+<header class="site-header">
+  <div class="site-header__brand">
+    <a class="brand-link" href={linkBase || '#'} aria-label={`${site.name}, inicio`}>
+      <span class="brand-link__logo" aria-hidden="true" set:html={dfmIsologo} />
+    </a>
+  </div>
+
+  <nav class="site-nav" aria-label="Principal">
+    <ul role="list">
+      {nav.map((item) => <li><a href={linkBase + item.href}>{item.label}</a></li>)}
+    </ul>
+  </nav>
+
+  <div class="site-header__actions">
+    <button class="menu-button" type="button" popovertarget="menu" aria-label="Abrir menú">
+      <Icon name="menu" size={20} />
+    </button>
+  </div>
+</header>
+
+<div id="menu" class="menu" popover>
+  <div class="menu__top">
+    <a class="brand-link" href={`${linkBase}#top`} aria-label={`${site.name}, inicio`}>
+      <span class="brand-link__logo" aria-hidden="true" set:html={dfmIsologo} />
+    </a>
+    <button class="menu-button menu-button--close" type="button" popovertarget="menu" popovertargetaction="hide" aria-label="Cerrar menú" autofocus>
+      <Icon name="close" size={20} />
+    </button>
+  </div>
+
+  <nav class="menu__nav" aria-label="Navegación principal">
+    <ol role="list" class="menu__list">
+      {nav.map((item) => (
+        <li>
+          <a href={linkBase + item.href}>
+            <span class="menu__label">{item.label}</span>
+            <span class="menu__arrow" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="menu__details">
+    <div class="menu__block">
+      <p class="menu__tag label soft">Sede Buenos Aires</p>
+      <p class="menu__info">
+        <span>{contact.address.street}, {contact.address.unit}</span>
+        <span>{contact.address.area} · {contact.address.city}</span>
+      </p>
+    </div>
+
+    <div class="menu__block">
+      <p class="menu__tag label soft">Atención Inmediata</p>
+      <p class="menu__phones">
+        <a href={telHref(contact.phones[0])}>{contact.phones[0]}</a>
+        <a href={telHref(contact.phones[1])}>{contact.phones[1]}</a>
+      </p>
+      <a class="menu__whatsapp label" href="https://wa.me/5491164073969?text=Hola%2C%20quisiera%20realizar%20una%20consulta%20legal" target="_blank" rel="noopener noreferrer">
+        <span>WhatsApp Directo</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="menu__block">
+      <p class="menu__tag label soft">Socios Titulares</p>
+      <div class="menu__emails">
+        {contact.emails.map((e) => (
+          <a href={`mailto:${e.address}`} title={`Enviar correo a ${e.use}`} class="menu__email-link">
+            <span class="menu__email-name">{e.use}</span>
+            <span class="menu__email-addr soft">{e.address}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="back-to-top" href={`${linkBase}#top`} aria-label="Volver arriba" title="Volver arriba">
+  <Icon name="arrow" size={18} />
+</a>
+
+<script>
+  // A refresh starts at the top (6.1): in-page links leave a #section in the address, and browsers
+  // restore the old scroll position, so a refresh used to jump to a section. Only a reload is reset;
+  // a fresh visit to a shared /#equipo still lands on Equipo. Manual restoration only on a reload:
+  // set on every load, it also stopped Back after an in-page link from returning to where you were.
+  if ((performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload') {
+    history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    const top = () => scrollTo({ top: 0, behavior: 'instant' });
+    top();
+    // once the reset holds, hand restoration back to the browser, so Back keeps working after a refresh
+    addEventListener('load', () => { top(); requestAnimationFrame(() => { history.scrollRestoration = 'auto'; }); }, { once: true });
+  }
+
+  // Close the menu once a link inside it is followed. Without this script the menu
+  // still works; it just stays open until it's dismissed.
+  const menu = document.getElementById('menu');
+  const siteHeader = document.querySelector<HTMLElement>('.site-header');
+  menu?.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('a')) menu.hidePopover();
+  });
+  menu?.addEventListener('beforetoggle', (event) => {
+    const isOpen = (event as ToggleEvent).newState === 'open';
+    siteHeader?.toggleAttribute('data-menu-open', isOpen);
+    document.documentElement.classList.toggle('menu-is-open', isOpen);
+  });
+  // Focus back on the menu button as the menu closes: Chrome and Firefox do it themselves, Safari doesn't (8.6g)
+  menu?.addEventListener('toggle', (event) => {
+    if ((event as ToggleEvent).newState === 'closed') siteHeader?.querySelector<HTMLElement>('.menu-button')?.focus();
+  });
+
+  const backToTop = document.querySelector<HTMLAnchorElement>('.back-to-top');
+  const allBands = [...document.querySelectorAll<HTMLElement>('.band')];
+  const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>('.site-nav a[href*="#"], .menu__list a[href*="#"]')];
+  const trackedSections = [...new Set(sectionLinks.map((link) => link.hash.slice(1)))]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => !!el);
+  const firstSection = document.querySelector<HTMLElement>('main > section:not(.hero)');
+  let previousScrollY = window.scrollY;
+
+  const updateBackToTop = () => {
+    const y = window.scrollY;
+    const vh = window.innerHeight || 1;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+    const nearBottom = y >= maxScroll - 80;
+    const probeLine = vh * 0.38;
+    const atHome = !!firstSection && firstSection.getBoundingClientRect().top > probeLine;
+    if (atHome && y < previousScrollY && menu?.matches(':popover-open')) menu.hidePopover();
+    previousScrollY = y;
+
+    if (backToTop) {
+      if (y > 420) backToTop.setAttribute('data-visible', '');
+      else backToTop.removeAttribute('data-visible');
+
+      const btnRect = backToTop.getBoundingClientRect();
+      const probeY = btnRect.height > 0 ? btnRect.top + btnRect.height * 0.5 : vh - 44;
+      let underBand: HTMLElement | undefined;
+      for (const band of allBands) {
+        const r = band.getBoundingClientRect();
+        if (r.top <= probeY && r.bottom >= probeY) underBand = band;
+      }
+      const isDarkBand = underBand?.classList.contains('band--ink') || underBand?.classList.contains('band--forest');
+      if (isDarkBand) backToTop.setAttribute('data-on-dark', '');
+      else backToTop.removeAttribute('data-on-dark');
+    }
+
+    if (siteHeader) {
+      if (y > 40) siteHeader.setAttribute('data-scrolled', '');
+      else siteHeader.removeAttribute('data-scrolled');
+
+      const navProbeY = 32;
+      let underNavBand: HTMLElement | undefined;
+      for (const band of allBands) {
+        const r = band.getBoundingClientRect();
+        if (r.top <= navProbeY && r.bottom >= navProbeY) underNavBand = band;
+      }
+      // Probe band under nav for dynamic contrast
+      const isNavLight = underNavBand?.classList.contains('band--paper') || underNavBand?.classList.contains('band--stone');
+      if (isNavLight) siteHeader.setAttribute('data-on-light', '');
+      else siteHeader.removeAttribute('data-on-light');
+      if (underNavBand?.classList.contains('hero')) siteHeader.setAttribute('data-on-hero', '');
+      else siteHeader.removeAttribute('data-on-hero');
+    }
+
+    if (trackedSections.length) {
+      const navProbeLine = 32;
+      let activeId = '';
+      if (!firstSection || firstSection.getBoundingClientRect().top <= navProbeLine) {
+        for (const sec of trackedSections) {
+          if (sec.getBoundingClientRect().top <= navProbeLine) activeId = sec.id;
+        }
+      }
+      if (nearBottom) activeId = trackedSections[trackedSections.length - 1]?.id ?? activeId;
+
+      sectionLinks.forEach((link) => {
+        if (activeId && link.hash === `#${activeId}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    }
+  };
+  updateBackToTop();
+  addEventListener('scroll', updateBackToTop, { passive: true });
+  addEventListener('resize', updateBackToTop, { passive: true });
+
+  // Office photo gallery: open a native lightbox, with buttons and arrow-key navigation.
+  const gallery = document.querySelector<HTMLDialogElement>('.gallery-viewer');
+  const galleryButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-gallery-index]')];
+  const galleryImage = gallery?.querySelector<HTMLImageElement>('.gallery-viewer__image');
+  const galleryCount = gallery?.querySelector<HTMLElement>('.gallery-viewer__count');
+  let galleryIndex = 0;
+  const showGalleryImage = (index: number) => {
+    const button = galleryButtons[index];
+    if (!button || !galleryImage) return;
+    galleryIndex = index;
+    galleryImage.src = button.dataset.gallerySrc ?? '';
+    galleryImage.alt = button.dataset.galleryAlt ?? '';
+    if (galleryCount) galleryCount.textContent = `${index + 1} / ${galleryButtons.length}`;
+  };
+  galleryButtons.forEach((button) => button.addEventListener('click', () => {
+    showGalleryImage(Number(button.dataset.galleryIndex));
+    gallery?.showModal();
+  }));
+  gallery?.querySelector('[data-gallery-prev]')?.addEventListener('click', () => {
+    showGalleryImage((galleryIndex + galleryButtons.length - 1) % galleryButtons.length);
+  });
+  gallery?.querySelector('[data-gallery-next]')?.addEventListener('click', () => {
+    showGalleryImage((galleryIndex + 1) % galleryButtons.length);
+  });
+  gallery?.querySelector('[data-gallery-close]')?.addEventListener('click', () => gallery.close());
+  gallery?.addEventListener('click', (event) => { if (event.target === gallery) gallery.close(); });
+  gallery?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); showGalleryImage((galleryIndex + galleryButtons.length - 1) % galleryButtons.length); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); showGalleryImage((galleryIndex + 1) % galleryButtons.length); }
+  });
+
+  // Compose the visitor's message in their email app; the site does not pretend to send it itself.
+  const contactForm = document.querySelector<HTMLFormElement>('#contact-form');
+  contactForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const fields = new FormData(contactForm);
+    const body = [
+      `Nombre: ${fields.get('Nombre')}`,
+      `Correo: ${fields.get('Correo')}`,
+      `Teléfono: ${fields.get('Teléfono') || 'No indicado'}`,
+      '',
+      'Consulta:',
+      String(fields.get('Consulta') ?? ''),
+    ].join('\r\n');
+    const note = document.querySelector<HTMLElement>('#contact-form-note');
+    if (note) note.textContent = 'Se abrirá su aplicación de correo para revisar y enviar el mensaje.';
+    window.location.href = `${contactForm.action}?subject=${encodeURIComponent('Consulta desde la web')}&body=${encodeURIComponent(body)}`;
+  });
+
+  // Clearer text reveals for copy and lists: hidden only after this observer is available, and
+  // skipped entirely when reduced motion is requested or IntersectionObserver is unavailable.
+  const scrollCopy = [...document.querySelectorAll<HTMLElement>('[data-scroll-in]')];
+  if ('IntersectionObserver' in window && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('scroll-pending');
+          entry.target.classList.add('scroll-arrived');
+        } else if (entry.boundingClientRect.top > innerHeight * 0.92) {
+          entry.target.classList.remove('scroll-arrived');
+          entry.target.classList.add('scroll-pending');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+
+    scrollCopy.forEach((item) => {
+      const closedPanel = item.closest('details:not([open])');
+      if (closedPanel) {
+        item.classList.add('scroll-pending');
+        closedPanel.addEventListener('toggle', () => {
+          if (closedPanel.open) revealObserver.observe(item);
+        }, { once: true });
+      } else {
+        if (item.getBoundingClientRect().top > innerHeight * 0.85) item.classList.add('scroll-pending');
+        revealObserver.observe(item);
+      }
+    });
+  }
+
+  // Page-by-page curtain parallax between sections (.band) & staggered scroll-down emergence ([data-scroll-item])
+  const scrollMotion = matchMedia('(prefers-reduced-motion: no-preference)');
+  if (scrollMotion.matches) {
+    document.documentElement.classList.add('has-scroll-stage');
+    const heroBand = document.querySelector<HTMLElement>('.hero.band');
+    const contentBands = [...document.querySelectorAll<HTMLElement>('main > .band:not(.hero), .footer.band')];
+
+    type ScrollItemConfig = { el: HTMLElement; speed: number };
+    const scrollItems: ScrollItemConfig[] = [];
+    const registerItem = (el: HTMLElement | null | undefined, delayMs = 0, offsetX = 0, speed = 0) => {
+      if (!el) return;
+      el.setAttribute('data-scroll-item', '');
+      el.style.setProperty('--item-delay', `${delayMs}ms`);
+      if (offsetX !== 0) el.style.setProperty('--item-x', `${offsetX}px`);
+      scrollItems.push({ el, speed });
+    };
+
+    // 1. Section headers across the page
+    document.querySelectorAll<HTMLElement>('.section-head').forEach((head) => {
+      registerItem(head.querySelector<HTMLElement>('.section-head__title'), 0, 0, 0);
+      const slot = head.querySelector<HTMLElement>('.section-head__body > :not(.section-head__title)');
+      registerItem(slot, 120, 0, 0);
+    });
+
+    // 2. El Estudio: pilares institucionales y fotografía de los socios
+    document.querySelectorAll<HTMLElement>('.estudio__story > .story__part, .story > .story__part').forEach((el, i) => {
+      registerItem(el, i * 130, 0, 0);
+    });
+    registerItem(document.querySelector<HTMLElement>('.estudio__media'), 100, 0, 0);
+
+    // 3. Áreas de práctica: 5 columnas horizontales
+    document.querySelectorAll<HTMLElement>('.areas__grid > .area-col').forEach((el, i) => {
+      registerItem(el, i * 60, 0, 0);
+    });
+
+    // 3b. Servicios legales: 6 tarjetas en grilla 3×2
+    document.querySelectorAll<HTMLElement>('.servicios__grid > .servicio-card').forEach((el, i) => { registerItem(el, (i % 3) * 80 + Math.floor(i / 3) * 60, 0, 0); });
+    // 4. Equipo: socios fundadores cards + alianzas
+    document.querySelectorAll<HTMLElement>('.partners > .partner-card').forEach((el, i) => {
+      registerItem(el, i * 110, 0, 0);
+    });
+
+    // Footer / Contacto: map, site map, and contact columns
+    registerItem(document.querySelector<HTMLElement>('.footer__map-panel'), 0, 0, 0);
+    registerItem(document.querySelector<HTMLElement>('.footer__site-map'), 90, 0, 0);
+    document.querySelectorAll<HTMLElement>('.footer__cols > div').forEach((el, i) => {
+      registerItem(el, 180 + i * 90, 0, 0);
+    });
+
+    let rafId = 0;
+    const updateScrollStage = () => {
+      rafId = 0;
+      const vh = window.innerHeight || 1;
+      const sy = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+      const nearDocBottom = sy >= maxScroll - 36;
+
+      if (heroBand) {
+        const heroExit = Math.min(1, Math.max(0, sy / (vh * 0.95)));
+        heroBand.style.setProperty('--hero-exit', heroExit.toFixed(4));
+      }
+
+      contentBands.forEach((band, idx) => {
+        const rect = band.getBoundingClientRect();
+        const isContactUnit = band.id === 'contacto' || idx >= contentBands.length - 2;
+        const enterSpan = isContactUnit ? Math.min(vh * 0.45, Math.max(140, rect.height)) : vh * 0.62;
+        const rawEnter = (isContactUnit && nearDocBottom) ? 1 : Math.min(1, Math.max(0, (vh - rect.top) / enterSpan));
+        const easedEnter = 1 - Math.pow(1 - rawEnter, 3);
+        band.style.setProperty('--band-enter', easedEnter.toFixed(4));
+
+        let easedExit = 0;
+        if (!isContactUnit && !nearDocBottom && rect.top <= 48 && rect.bottom < vh * 0.65) {
+          const rawExit = Math.min(1, Math.max(0, (vh * 0.65 - rect.bottom) / (vh * 0.65)));
+          easedExit = Math.pow(rawExit, 1.35);
+        }
+        band.style.setProperty('--band-exit', easedExit.toFixed(4));
+      });
+
+      const triggerY = nearDocBottom ? vh * 1.05 : vh * 0.88;
+      const resetY = vh * 0.96;
+
+      for (const { el } of scrollItems) {
+        const r = el.getBoundingClientRect();
+        if (r.top <= triggerY) {
+          if (!el.classList.contains('is-visible')) {
+            el.classList.remove('is-waiting');
+            el.classList.add('is-visible');
+          }
+        } else if (r.top > resetY) {
+          if (!el.classList.contains('is-waiting')) {
+            el.classList.remove('is-visible');
+            el.classList.add('is-waiting');
+          }
+        }
+      }
+    };
+
+    const requestStageTick = () => {
+      if (!rafId) rafId = requestAnimationFrame(updateScrollStage);
+    };
+
+    updateScrollStage();
+    addEventListener('scroll', requestStageTick, { passive: true });
+    addEventListener('resize', requestStageTick, { passive: true });
+  }
+
+  // Cinematic video loop with smooth ease restart
+  const heroFilm = document.querySelector<HTMLVideoElement>('.hero__bg-video');
+  if (heroFilm) {
+    heroFilm.muted = true;
+    heroFilm.playsInline = true;
+    heroFilm.loop = false; // controlled ease loop
+
+    const playFilm = () => { void heroFilm.play().catch(() => {}); };
+    playFilm();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') playFilm();
+    });
+
+    const FADE_DUR = 0.7; // seconds for the ease transition
+    let isFading = false;
+
+    heroFilm.style.transition = `opacity ${FADE_DUR}s cubic-bezier(0.4, 0, 0.2, 1)`;
+
+    heroFilm.addEventListener('timeupdate', () => {
+      if (!heroFilm.duration || isFading) return;
+      const timeLeft = heroFilm.duration - heroFilm.currentTime;
+      if (timeLeft <= FADE_DUR && timeLeft > 0) {
+        isFading = true;
+        heroFilm.style.opacity = '0';
+      }
+    });
+
+    heroFilm.addEventListener('ended', () => {
+      heroFilm.currentTime = 0;
+      playFilm();
+      requestAnimationFrame(() => {
+        heroFilm.style.opacity = '1';
+        setTimeout(() => {
+          isFading = false;
+        }, FADE_DUR * 1000);
+      });
+    });
+  }
+
+  // 8.5k3: the hero's light moves once, while the hero is in view and motion is welcome; since 8.8 from the start,
+  // inside the still's intro (it waited for the intro to end, so the light moved only from about 3 s). Its sources
+  // show as canvases (an element shown later, full-bleed, would become the LCP): the paper drawn once, the clip as
+  // each frame arrives (8.6: redrawing everything every frame cost 30-70 ms a frame on a phone); CSS adds the light
+  // to the paper and crops them (Hero.astro). They join the wrapper the intro runs on, so they move with it
+  const template = document.querySelector<HTMLTemplateElement>('#hero-motion');
+  const fig = template?.parentElement;
+  const img = fig?.querySelector<HTMLImageElement>('.hero__img');
+  // from 900 px up: phones show the band's plain green (8.6b)
+  const welcome = matchMedia('(prefers-reduced-motion: no-preference) and (min-width: 900px)');
+  if (template && fig && img && welcome.matches &&
+      CSS.supports('mix-blend-mode', 'plus-lighter') && 'requestVideoFrameCallback' in HTMLVideoElement.prototype &&
+      !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) {
+    (async () => {
+      const box = fig.getBoundingClientRect();
+      const motion = document.createElement('div');
+      motion.className = 'hero__motion';
+      const canvas = (w: number, h: number) => Object.assign(document.createElement('canvas'), { width: w, height: h });
+      const still = (src: HTMLImageElement) => {
+        const c = canvas(src.naturalWidth, src.naturalHeight);
+        c.getContext('2d')!.drawImage(src, 0, 0);
+        return c;
+      };
+      try {
+        // fetched at once, at low priority: a few KB, never ahead of the still
+        const paper = new Image();
+        paper.fetchPriority = 'low';
+        paper.sizes = `${Math.round(Math.max(box.width, box.height * 1.6))}px`; // cover: the wider of the two
+        paper.srcset = template.content.querySelector('img')!.srcset;
+        const decoded = paper.decode();
+        // imported, not cloned: a template's own nodes live in an inert document, where media never loads. On the
+        // page, at 1 px and invisible (Safari loads no clip off it; one pixel is never the LCP), set to load
+        const video = document.importNode(template.content.querySelector('video')!, true);
+        // the source the browser can play, as <source> would pick, fetched whole and played from memory: Workers static
+        // assets answer no byte ranges, and Safari plays nothing from a server that won't (8.6h6b)
+        const clip = [...video.querySelectorAll('source')].find((s) => video.canPlayType(s.type));
+        video.src = URL.createObjectURL(await (await fetch(clip!.src, { priority: 'low' } as RequestInit)).blob());
+        await decoded;
+        video.className = 'hero__clip';
+        video.preload = 'auto';
+        motion.append(video);
+        fig.append(motion);
+        await new Promise((resolve, reject) => { video.onloadeddata = resolve; video.onerror = reject; video.load(); });
+        const frame = canvas(video.videoWidth, video.videoHeight);
+        frame.className = 'hero__light';
+        const f = frame.getContext('2d')!;
+        motion.prepend(still(paper), frame);
+        // the still first (the LCP; the layers only ever stand in for it). Still welcome, and in view, after the
+        // waits? Then one way out for every ending (8.6g): the clip ends or errors, motion stops being welcome
+        // (reduced motion asked for, the window narrowed), or the clip stalls past its length
+        await img.decode();
+        if (!welcome.matches || fig.getBoundingClientRect().bottom <= 0) throw 0;
+        const end = () => {
+          motion.classList.remove('is-on');
+          setTimeout(() => motion.remove(), 400);
+        };
+        welcome.onchange = video.onended = video.onerror = end;
+        setTimeout(end, video.duration * 1e3 + 2e3);
+        const draw = () => {
+          f.drawImage(video, 0, 0);
+          if (!video.ended) video.requestVideoFrameCallback(draw);
+        };
+        f.drawImage(video, 0, 0);
+        // on the page since the clip began loading, so it fades in from 0; the clip starts from rest, gently, so it
+        // plays as the fade begins
+        motion.classList.add('is-on');
+        video.requestVideoFrameCallback(draw);
+        await video.play();
+      } catch { motion.remove(); }
+    })();
+  }
+</script>
+
+<style>
+  /* The navbar: always only the floating hamburger button as requested */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    z-index: 50;
+    border: none;
+    background: transparent;
+    pointer-events: none;
+    --bg: var(--forest);
+    --fg: var(--white);
+    --soft: var(--sage);
+    --ink-pure: var(--ink);
+  }
+
+  .site-header__brand {
+    display: none !important;
+  }
+
+  .site-nav {
+    display: none !important;
+  }
+
+  .site-header__actions {
+    position: fixed;
+    top: var(--space-4);
+    right: var(--pad);
+    z-index: 60;
+    pointer-events: auto;
+  }
+
+  /* Hamburger button: ALWAYS visible on desktop and mobile */
+  .menu-button {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    background: var(--white);
+    color: var(--ink-pure);
+    border: 1.5px solid var(--white);
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1);
+    transition:
+      background-color 280ms var(--ease-out),
+      color 280ms var(--ease-out),
+      border-color 280ms var(--ease-out),
+      scale 150ms ease-out,
+      opacity 200ms ease-out,
+      visibility 200ms;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-button:active { scale: 0.94; }
+  }
+
+  /* When on a lighter background band, invert button colors */
+  .site-header[data-on-light] .menu-button {
+    background: var(--ink-pure);
+    color: var(--white);
+    border: 1.5px solid var(--white);
+    box-shadow: none;
+  }
+  .site-header[data-on-hero] .menu-button {
+    background: transparent;
+    color: var(--white);
+    border-color: var(--white);
+    box-shadow: none;
+  }
+
+  @media (hover: hover) {
+    .menu-button:hover {
+      background: var(--accent);
+      color: var(--ink-pure);
+      border-color: var(--accent);
+      scale: 1.05;
+    }
+    .site-header[data-on-light] .menu-button:hover {
+      background: var(--accent);
+      color: var(--ink-pure);
+      border-color: var(--accent);
+      scale: 1.05;
+    }
+    .site-header[data-on-hero] .menu-button:hover {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+      scale: 1.05;
+    }
+  }
+
+  /* When drawer is open, hide the background trigger button so close button takes over */
+  .site-header[data-menu-open] .site-header__actions {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Content-sized panel with a viewport limit for short screens. */
+  .menu {
+    position: fixed;
+    top: 0.75rem;
+    bottom: auto;
+    margin: 0;
+    --bg: var(--forest);
+    --fg: var(--white);
+    --soft: var(--sage);
+    --header-shadow: var(--ink);
+    --ink-pure: var(--ink);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    flex-direction: column;
+    border: var(--rule-w) solid color-mix(in srgb, var(--fg) 24%, transparent);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    box-shadow: -15px 20px 50px color-mix(in srgb, var(--header-shadow) 75%, transparent);
+    opacity: 0;
+    overscroll-behavior: contain;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition:
+      opacity var(--dur-exit) var(--ease-out),
+      display var(--dur-exit) allow-discrete,
+      overlay var(--dur-exit) allow-discrete;
+  }
+  /* Crucial: allow scrolling the web page while menu is open */
+  .menu::backdrop {
+    pointer-events: none;
+    background: transparent;
+  }
+
+  @media (min-width: 900px) {
+    .menu {
+      width: 25rem;
+      max-width: calc(100vw - 2 * var(--pad));
+      left: auto;
+      right: var(--pad);
+      height: auto;
+      max-height: calc(100dvh - 1.5rem);
+      padding: 0 var(--space-5) var(--space-5);
+    }
+  }
+  @media (max-width: 899px) {
+    .menu {
+      width: auto;
+      inset-inline: clamp(0.75rem, 3vw, 1.25rem);
+      max-height: calc(100dvh - 1.5rem);
+      padding: 0 var(--space-4) var(--space-5);
+    }
+  }
+
+  .menu:popover-open {
+    display: flex;
+    opacity: 1;
+    transition-duration: var(--dur-ui);
+  }
+  .menu::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url('../assets/grain.svg');
+    background-size: 220px 220px;
+    opacity: 0.07;
+  }
+  @starting-style { .menu:popover-open { opacity: 0; } }
+
+  .menu__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 4.5rem;
+    gap: var(--space-4);
+    flex: none;
+    border-bottom: var(--rule-w) solid color-mix(in srgb, var(--fg) 18%, transparent);
+    margin-bottom: var(--space-3);
+  }
+  .menu .brand-link {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+  }
+  .menu .brand-link__logo {
+    display: block;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    color: var(--white);
+  }
+  .menu .brand-link__logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+  .menu-button--close {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--fg) 20%, transparent);
+    background: transparent;
+    box-shadow: none;
+    color: var(--white);
+  }
+  @media (hover: hover) {
+    .menu-button--close:hover {
+      background: var(--accent);
+      color: var(--ink-pure);
+      border-color: var(--accent);
+    }
+  }
+
+  /* Navigation Links inside Drawer */
+  .menu__nav {
+    margin-top: var(--space-3);
+  }
+  .menu__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .menu__list li {
+    border-bottom: var(--rule-w) solid color-mix(in srgb, var(--fg) 14%, transparent);
+  }
+  .menu__list li:last-child { border-bottom: var(--rule-w) solid color-mix(in srgb, var(--fg) 14%, transparent); }
+  .menu__list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3rem;
+    padding-block: var(--space-3);
+    font-family: var(--font-sans);
+    text-decoration: none;
+    color: var(--white);
+    transition: color var(--dur-ui) var(--ease-out), padding-left var(--dur-ui) var(--ease-out);
+  }
+  .menu__label {
+    flex: 1;
+    font-size: var(--step-lead);
+    font-weight: var(--weight-regular);
+    letter-spacing: 0.015em;
+  }
+  .menu__arrow {
+    font-size: 1.1rem;
+    opacity: 0.45;
+    transition: opacity var(--dur-ui) var(--ease-out), transform var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) {
+    .menu__list a:hover {
+      color: var(--accent);
+      padding-left: var(--space-2);
+    }
+    .menu__list a:hover .menu__arrow {
+      opacity: 1;
+      transform: translate(3px, -3px);
+    }
+  }
+  .menu__list a[aria-current="location"] .menu__label {
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.32em;
+  }
+
+  /* Information sections inside Drawer */
+  .menu__details {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+  .menu__block {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .menu__tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+  .menu__info {
+    display: grid;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--white);
+  }
+  .menu__phones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .menu__phones a {
+    font-size: 0.875rem;
+    color: var(--white);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--fg) 28%, transparent);
+    padding-bottom: 2px;
+  }
+  .menu__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    margin-top: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid color-mix(in srgb, #25d366 55%, transparent);
+    color: #25d366;
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) {
+    .menu__whatsapp:hover {
+      background: #25d366;
+      border-color: #25d366;
+      color: var(--ink-pure);
+    }
+  }
+  .menu__emails {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .menu__email-link {
+    display: grid;
+    text-decoration: none;
+    color: var(--white);
+    font-size: 0.8125rem;
+  }
+  .menu__email-name {
+    font-weight: 500;
+  }
+  .menu__email-addr {
+    overflow-wrap: anywhere;
+    font-size: 0.78rem;
+    color: var(--soft);
+  }
+
+  .back-to-top {
+    --btt-bg: var(--forest);
+    --btt-fg: var(--white);
+    position: fixed;
+    right: var(--pad);
+    bottom: var(--space-5);
+    z-index: 45;
+    display: grid;
+    place-items: center;
+    width: 2.85rem;
+    height: 2.85rem;
+    border: 1px solid color-mix(in srgb, var(--btt-fg) 32%, transparent);
+    background: var(--btt-bg);
+    color: var(--btt-fg);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 0.5rem;
+    pointer-events: none;
+    transition:
+      opacity var(--dur-ui) var(--ease-out),
+      translate var(--dur-ui) var(--ease-out),
+      visibility var(--dur-ui) linear,
+      background-color 280ms var(--ease-out),
+      color 280ms var(--ease-out),
+      border-color 280ms var(--ease-out);
+  }
+  .back-to-top[data-on-dark] {
+    --btt-bg: var(--paper);
+    --btt-fg: var(--white);
+    border-color: color-mix(in srgb, var(--btt-fg) 24%, transparent);
+  }
+  @media (hover: hover) {
+    .back-to-top:hover {
+      background: var(--accent);
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+  }
+  .back-to-top[data-visible], .back-to-top:focus-visible {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+  .back-to-top :global(svg) { rotate: -90deg; }
+
+  /* Allow page scrolling while menu is open */
+  :global(html.menu-is-open) {
+    overflow: auto;
+  }
+  .site-header[data-menu-open] {
+    /* Main header remains intact or gracefully non-interactive */
+    pointer-events: none;
+  }
+
+  @supports not selector(:popover-open) {
+    .menu, .menu-button { display: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .site-header {
+      --contrast-bg: var(--ink);
+      background: var(--contrast-bg);
+    }
+  }
+</style>

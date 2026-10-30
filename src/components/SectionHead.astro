@@ -1,0 +1,62 @@
+---
+// A two-tone section heading; consistent eyebrow, title and description. Anything in the slot sits under it.
+interface Props {
+  title: [string, string?];
+  headingId: string;
+  /** Full width, for half-width panels */
+  stacked?: boolean;
+  /** Break the line between the two tones */
+  breakTitle?: boolean;
+  /** Centered: for closing statements */
+  centered?: boolean;
+}
+
+const { title, headingId, stacked = false, breakTitle = false, centered = false } = Astro.props;
+---
+<div class:list={['section-head', 'grid', 'reveal', { 'section-head--stacked': stacked || centered, 'section-head--centered': centered }]}>
+  <div class="section-head__body">
+    <h2 id={headingId} class="section-head__title">{title[0]}{title[1] && <>{breakTitle ? <br /> : ' '}<span class="soft">{title[1]}</span></>}</h2>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .section-head__body {
+    grid-column: 1 / -1;
+    container-type: inline-size;
+    text-align: left;
+  }
+
+  .section-head__title {
+    font-size: var(--step-1);
+    max-width: 22em;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+    margin-inline: 0;
+  }
+
+  .section-head--stacked .section-head__body { grid-column: 1 / -1; }
+  .section-head--centered { text-align: left; }
+  .section-head--centered .section-head__title { margin-inline: 0; }
+  .section-head__body > p { max-width: 44rem; margin-inline: 0; line-height: var(--leading-body); text-align: left; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .section-head__body {
+        animation-name: section-head-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+  @keyframes section-head-parallax {
+    from { translate: 0 0.6rem; }
+    to { translate: 0 -0.6rem; }
+  }
+
+  @media (max-width: 899px) {
+    .section-head__body { grid-column: 1 / -1; }
+  }
+</style>

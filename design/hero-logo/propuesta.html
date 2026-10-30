@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es-AR">
+<!-- 8.5b (Franco, 2026-10-23): the five hero-logo takes for the client, in Spanish, C proposed. A4 landscape,
+     printed with: node scripts/pdf.mjs design/hero-logo/propuesta.html docs/Saenz-Valiente-portada-propuestas.pdf
+     The renders are the takes at 1440 × 900 and 390 × 844 (design/hero-logo/*.html), in renders/. -->
+<head>
+<meta charset="utf-8">
+<title>Sáenz Valiente &amp; Asociados · Propuestas para la portada</title>
+<style>
+  @font-face { font-family: 'Valiente Display'; font-weight: 300; src: url(../../src/assets/fonts/ValienteDisplay-Light.woff2) format('woff2'); }
+  @font-face { font-family: 'Jost'; font-weight: 300 400; src: url(../../src/assets/fonts/jost-latin-wght-normal.woff2) format('woff2'); }
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --paper: #f1ede2; --ink: #1d1d1b; --olive: #615a42; --forest: #2a3220; --rule: #1d1d1b26;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Jost', Futura, sans-serif; font-weight: 400; -webkit-font-smoothing: antialiased; }
+  .page { position: relative; width: 297mm; height: 210mm; padding: 16mm 18mm 14mm; overflow: hidden; break-after: page; display: flex; flex-direction: column; }
+  .page:last-child { break-after: auto; }
+  .caps { font-size: 8.5pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); }
+  .name { font-family: 'Valiente Display'; font-weight: 300; text-transform: uppercase; letter-spacing: 0.08em; }
+  footer { margin-top: auto; display: flex; justify-content: space-between; padding-top: 4mm; border-top: 0.5pt solid var(--rule); }
+
+  /* Cover */
+  .cover { justify-content: space-between; }
+  .cover__title { display: grid; gap: 6mm; max-width: 150mm; }
+  .cover__title .name { font-size: 26pt; line-height: 1; }
+  .cover__title .name small { display: block; margin-top: 3mm; font-family: 'Jost'; font-size: 9pt; font-weight: 400; letter-spacing: 0.22em; color: var(--olive); }
+  h1 { font-weight: 300; font-size: 30pt; line-height: 1.12; letter-spacing: -0.01em; margin-top: 10mm; text-wrap: balance; }
+  .cover__body { display: grid; grid-template-columns: 1fr 120mm; gap: 14mm; align-items: end; }
+  .cover p { font-size: 11pt; line-height: 1.55; max-width: 120mm; }
+  .cover img { width: 120mm; height: auto; display: block; outline: 0.5pt solid var(--rule); outline-offset: -0.5pt; }
+
+  /* One take */
+  .take__head { display: flex; align-items: baseline; gap: 6mm; }
+  .take__letter { font-family: 'Valiente Display'; font-weight: 300; font-size: 34pt; line-height: 1; color: var(--forest); }
+  .take__title { font-weight: 300; font-size: 20pt; line-height: 1.1; }
+  .tag { align-self: center; padding: 1.2mm 3mm; background: var(--forest); color: var(--paper); font-size: 8pt; letter-spacing: 0.16em; text-transform: uppercase; }
+  .take__idea { margin-top: 3mm; font-size: 11pt; line-height: 1.5; max-width: 190mm; }
+  .take__renders { display: flex; align-items: flex-start; gap: 7mm; margin-top: 7mm; }
+  figure { display: grid; gap: 2mm; }
+  figure img { display: block; height: 108mm; width: auto; outline: 0.5pt solid var(--rule); outline-offset: -0.5pt; }
+  figcaption { font-size: 8pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); }
+
+  /* How to choose */
+  .choose__body { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; margin-top: 12mm; }
+  .choose p { font-size: 11.5pt; line-height: 1.6; }
+  .choose p + p { margin-top: 4mm; }
+  .choose ol { list-style: none; padding: 0; display: grid; gap: 3mm; font-size: 11pt; line-height: 1.4; }
+  .choose li { display: grid; grid-template-columns: 9mm 1fr; padding-bottom: 3mm; border-bottom: 0.5pt solid var(--rule); }
+  .choose li b { font-family: 'Valiente Display'; font-weight: 300; font-size: 14pt; color: var(--forest); }
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div class="cover__title">
+    <p class="name">Sáenz Valiente <small>&amp; Asociados</small></p>
+    <h1>El monograma en la portada del sitio</h1>
+  </div>
+  <div class="cover__body">
+    <div>
+      <p class="caps">Cinco propuestas · octubre de 2026</p>
+      <p style="margin-top:5mm">Las cinco conservan el monograma del Estudio tal como es: el mismo trazado, solo en distinto tamaño, sin redibujarlo ni deformarlo. Todas se apoyan en la luz verde de la portada actual y en la tipografía del sitio, y se muestran en computadora y en teléfono.</p>
+      <p style="margin-top:4mm">Proponemos la opción E. Las demás quedan a su consideración.</p>
+    </div>
+    <img src="renders/e-lateral-1440.jpg" alt="Opción E, la propuesta, en computadora">
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>1 / 7</span></footer>
+</section>
+
+<section class="page">
+  <div class="take__head"><span class="take__letter">A</span><h2 class="take__title">Opción A · Sello</h2></div>
+  <p class="take__idea">El monograma sobre el nombre, centrados como un solo sello, al modo en que el Estudio compone su marca.</p>
+  <div class="take__renders">
+    <figure><img src="renders/a-sello-1440.jpg" alt="Opción A en computadora"><figcaption>En computadora</figcaption></figure>
+    <figure><img src="renders/a-sello-390.jpg" alt="Opción A en teléfono"><figcaption>En teléfono</figcaption></figure>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>2 / 7</span></footer>
+</section>
+
+<section class="page">
+  <div class="take__head"><span class="take__letter">B</span><h2 class="take__title">Opción B · El monograma solo</h2></div>
+  <p class="take__idea">El monograma, grande, como la imagen de la portada; el nombre, pequeño, debajo, como un epígrafe.</p>
+  <div class="take__renders">
+    <figure><img src="renders/b-solo-1440.jpg" alt="Opción B en computadora"><figcaption>En computadora</figcaption></figure>
+    <figure><img src="renders/b-solo-390.jpg" alt="Opción B en teléfono"><figcaption>En teléfono</figcaption></figure>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>3 / 7</span></footer>
+</section>
+
+<section class="page">
+  <div class="take__head"><span class="take__letter">C</span><h2 class="take__title">Opción C · Filigrana</h2></div>
+  <p class="take__idea">El nombre centrado, como hoy, y detrás el monograma muy grande y muy tenue, como una marca de agua. El nombre sigue siendo lo primero que se lee.</p>
+  <div class="take__renders">
+    <figure><img src="renders/c-filigrana-1440.jpg" alt="Opción C en computadora"><figcaption>En computadora</figcaption></figure>
+    <figure><img src="renders/c-filigrana-390.jpg" alt="Opción C en teléfono"><figcaption>En teléfono</figcaption></figure>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>4 / 7</span></footer>
+</section>
+
+<section class="page">
+  <div class="take__head"><span class="take__letter">D</span><h2 class="take__title">Opción D · Trazo</h2></div>
+  <p class="take__idea">El contorno exacto del monograma como una sola línea fina, con el nombre debajo.</p>
+  <div class="take__renders">
+    <figure><img src="renders/d-trazo-1440.jpg" alt="Opción D en computadora"><figcaption>En computadora</figcaption></figure>
+    <figure><img src="renders/d-trazo-390.jpg" alt="Opción D en teléfono"><figcaption>En teléfono</figcaption></figure>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>5 / 7</span></footer>
+</section>
+
+<section class="page">
+  <div class="take__head"><span class="take__letter">E</span><h2 class="take__title">Opción E · Lateral</h2><span class="tag">Propuesta</span></div>
+  <p class="take__idea">El monograma a la izquierda y el nombre en dos líneas a su derecha, como en el logotipo del Estudio.</p>
+  <div class="take__renders">
+    <figure><img src="renders/e-lateral-1440.jpg" alt="Opción E en computadora"><figcaption>En computadora</figcaption></figure>
+    <figure><img src="renders/e-lateral-390.jpg" alt="Opción E en teléfono"><figcaption>En teléfono</figcaption></figure>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>6 / 7</span></footer>
+</section>
+
+<section class="page choose">
+  <h2 class="take__title">Cómo elegir</h2>
+  <div class="choose__body">
+    <div>
+      <p>Indíquennos la letra de la opción que prefieran. También pueden combinar ideas de distintas opciones, por ejemplo el tamaño del monograma de una con la disposición de otra.</p>
+      <p>Proponemos la opción E porque reúne el monograma y el nombre como en el logotipo del Estudio, centrados y en calma, sin que uno compita con el otro.</p>
+      <p>Cualquier ajuste se prueba en computadora y en teléfono antes de publicarse.</p>
+    </div>
+    <ol>
+      <li><b>A</b><span>Sello: el monograma sobre el nombre.</span></li>
+      <li><b>B</b><span>El monograma solo, grande; el nombre como epígrafe.</span></li>
+      <li><b>C</b><span>Filigrana: el monograma tenue detrás del nombre.</span></li>
+      <li><b>D</b><span>Trazo: el contorno del monograma en una línea fina.</span></li>
+      <li><b>E</b><span>Lateral: el monograma junto al nombre. Propuesta.</span></li>
+    </ol>
+  </div>
+  <footer class="caps"><span>Sáenz Valiente &amp; Asociados · Propuestas para la portada</span><span>7 / 7</span></footer>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+---
+// Served by the host for any missing path (Workers: not_found_handling "404-page"), so every
+// in-page link points at the home page by absolute path (linkBase).
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import { site } from '../content/site.ts';
+import { notFound } from '../content/not-found.ts';
+
+const base = import.meta.env.BASE_URL;
+---
+<Base title={`${notFound.title} · ${site.name}`} description={notFound.lead} linkBase={base}>
+  <main id="contenido" class="not-found band band--ink">
+    <p class="label soft">{notFound.label}</p>
+    <h1 class="display">{notFound.heading[0]} <span class="soft">{notFound.heading[1]}</span></h1>
+    <p class="lead not-found__lead">{notFound.lead}</p>
+    <Button href={base}>{notFound.action}</Button>
+  </main>
+</Base>
+
+<style>
+  /* The hero's shape: a full ink band with the statement at the bottom left */
+  .not-found {
+    min-height: 100svh;
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    padding-block: var(--space-8) var(--space-7);
+  }
+  .not-found .display { margin-block: var(--space-5) var(--space-6); }
+  .not-found__lead { max-width: 30ch; margin-bottom: var(--space-6); }
+</style>

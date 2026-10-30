@@ -1,0 +1,268 @@
+---
+// Equipo / Socios: socios fundadores con fotografía profesional y alianzas estratégicas.
+import SectionHead from './SectionHead.astro';
+import { Picture } from 'astro:assets';
+import { team } from '../content/team.ts';
+import delucaPhoto from '../assets/team/santiago-deluca.jpg';
+import fernandezMooresPhoto from '../assets/team/gonzalo-fernandez-moores.jpg';
+
+const photoMap = {
+  deluca: delucaPhoto,
+  fernandezMoores: fernandezMooresPhoto,
+};
+---
+<section id="socios" class="equipo band band--ink" aria-labelledby="equipo-title">
+  <span id="equipo" class="visually-hidden"></span>
+  <SectionHead title={team.title} headingId="equipo-title" />
+
+  <div class="partners stagger">
+    {team.socios.map((socio) => (
+      <article class="partner-card reveal line-top">
+        <div class="partner-card__media">
+          <Picture
+            src={photoMap[socio.photoKey]}
+            formats={['avif', 'webp']}
+            widths={[360, 600, 853]}
+            sizes="(min-width: 900px) 45vw, 90vw"
+            alt={`Fotografía profesional del ${socio.name}`}
+            class="partner-card__img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="partner-card__content">
+          <header class="partner-card__header">
+            <span class="label soft partner-card__role">{socio.role}</span>
+            <h3 class="partner-card__name">{socio.name}</h3>
+            <p class="partner-card__degrees soft">{socio.degrees}</p>
+          </header>
+
+          <p class="partner-card__summary soft" data-scroll-in>{socio.summary}</p>
+
+          <div class="partner-card__specialties">
+            <span class="label soft partner-card__spec-label">Especialidades principales</span>
+            <ul class="specialties-list" role="list">
+              {socio.specialties.map((spec) => (
+                <li class="specialty-item">{spec}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="partner-card__actions">
+            <a
+              href={socio.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="action-link"
+              aria-label={`Perfil de LinkedIn del ${socio.name}`}
+            >
+              <span>LinkedIn</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <a
+              href={socio.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="action-link"
+              aria-label={`Contactar por WhatsApp al ${socio.name}`}
+            >
+              <span>WhatsApp</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <a
+              href={`mailto:${socio.email}?subject=Consulta%20Legal`}
+              class="action-link"
+              aria-label={`Enviar correo a ${socio.email}`}
+            >
+              <span>Email</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+</section>
+
+<style>
+  .equipo {
+    padding-block: var(--section-y);
+  }
+
+  .partners {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(var(--space-6), 3.5vw, var(--space-8));
+    margin-top: var(--space-7);
+  }
+
+  .partner-card {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-5);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+
+  .partner-card__media {
+    position: relative;
+    width: 100%;
+    max-height: 380px;
+    aspect-ratio: 4 / 3.2;
+    overflow: hidden;
+    margin-bottom: var(--space-5);
+    border: var(--rule-w) solid var(--rule);
+    background: color-mix(in srgb, var(--bg) 85%, var(--fg));
+  }
+
+  .partner-card__media :global(.partner-card__img) {
+    width: 100%;
+    height: 115%;
+    object-fit: cover;
+    object-position: top center;
+    will-change: transform;
+    transform: translateY(-6%);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .partner-card__media :global(.partner-card__img) {
+        animation-name: partner-img-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+
+  @keyframes partner-img-parallax {
+    from {
+      transform: translateY(-7%);
+    }
+    to {
+      transform: translateY(7%);
+    }
+  }
+
+  .partner-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .partner-card__header {
+    margin-bottom: var(--space-3);
+  }
+
+  .partner-card__role {
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .partner-card__name {
+    margin: var(--space-2) 0;
+    font-family: var(--font-editorial);
+    font-size: var(--step-2);
+    font-weight: 400;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+  }
+
+  .partner-card__degrees {
+    font-size: var(--step-small);
+    line-height: 1.45;
+  }
+
+  .partner-card__summary {
+    font-size: 0.875rem;
+    line-height: var(--leading-body);
+    text-align: left;
+    margin-bottom: var(--space-5);
+  }
+
+  .partner-card__specialties {
+    margin-top: auto;
+    padding-top: var(--space-4);
+  }
+
+  .partner-card__spec-label {
+    font-size: 0.7rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .specialties-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .specialty-item {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.22rem 0.55rem;
+    border: var(--rule-w) solid var(--rule);
+    border-radius: 9999px;
+    color: var(--soft);
+    background: color-mix(in srgb, var(--fg) 2%, transparent);
+  }
+
+  .partner-card__actions {
+    display: flex;
+    gap: var(--space-5);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: var(--rule-w) solid var(--rule);
+  }
+
+  .action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.25rem;
+    font-size: var(--step-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: var(--fg);
+    opacity: 0.8;
+    transition: opacity var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+  }
+
+  .action-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .partner-card__actions a:not([href^="https://wa.me"]):is(:hover, :focus-visible, :active) {
+    color: var(--accent);
+  }
+
+  .partner-card__actions a[href^="https://wa.me"] {
+    color: #25d366;
+    opacity: 1;
+  }
+
+  .action-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 899px) {
+    .partners {
+      grid-template-columns: 1fr;
+      margin-top: var(--space-6);
+      gap: var(--space-7);
+    }
+    .partner-card__media {
+      max-height: 320px;
+    }
+  }
+</style>

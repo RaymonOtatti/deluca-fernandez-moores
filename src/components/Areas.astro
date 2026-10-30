@@ -1,0 +1,319 @@
+---
+// Practice areas: five expandable cards with specialty lists.
+// Source: https://delucafmoores.com.ar/areas-de-practica-del-derecho-abogados-en-buenos-aires-argentina/
+import SectionHead from './SectionHead.astro';
+import { areas } from '../content/areas.ts';
+---
+
+<section id="areas" class="areas band band--forest" aria-labelledby="areas-title">
+  <div class="areas__body">
+    <div class="areas__header-row">
+      <SectionHead title={areas.title} headingId="areas-title">
+        <p class="areas__lead soft lead" data-scroll-in>{areas.text}</p>
+      </SectionHead>
+
+    </div>
+
+    <div id="areas-grid" class="areas__grid reveal" role="region" aria-label="Especialidades por área de práctica">
+      {areas.groups.map((group, i) => (
+        <details
+          class="area-col"
+          id={`area-${group.id}`}
+          data-index={i}
+        >
+          <summary class="area-col__heading" aria-controls={`area-content-${group.id}`}>
+            <div class="area-col__head">
+              <h3 class="area-col__title">{group.title}</h3>
+            </div>
+            <span class="area-col__indicator" aria-hidden="true">+</span>
+          </summary>
+
+          <div class="area-col__body" id={`area-content-${group.id}`}>
+            <div class="area-col__body-inner">
+              <ul class="area-col__list" role="list">
+                {group.items.map((item) => (
+                  <li class="area-col__item">
+                    <span class="area-col__bullet" aria-hidden="true">—</span>
+                    <span class="area-col__text">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const areaCards = [...document.querySelectorAll<HTMLDetailsElement>('.area-col')];
+  const mobileAreas = window.matchMedia('(max-width: 699px)');
+  const syncAreaDisclosure = () => {
+    areaCards.forEach((card) => { card.open = !mobileAreas.matches; });
+  };
+  areaCards.forEach((card) => {
+    card.querySelector('summary')?.addEventListener('click', (event) => {
+      if (!mobileAreas.matches) event.preventDefault();
+    });
+  });
+  syncAreaDisclosure();
+  mobileAreas.addEventListener('change', syncAreaDisclosure);
+</script>
+
+<style>
+  .areas__body {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .areas__header-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: flex-end;
+    gap: var(--space-6);
+  }
+
+  .areas__lead {
+    max-width: 44rem;
+    margin: var(--space-5) 0 0;
+    font-size: var(--step-lead);
+    line-height: var(--leading-body);
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  .areas__actions {
+    margin-bottom: var(--space-2);
+  }
+
+  .areas__toggle-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    color: var(--fg);
+    border: var(--rule-w) solid var(--rule);
+    border-radius: 9999px;
+    font-family: var(--font-sans);
+    font-size: var(--step-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .areas__toggle-all:hover {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  }
+
+  .areas__toggle-all:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .areas__toggle-all-icon {
+    font-family: var(--font-mono);
+    font-size: 1.1em;
+    line-height: 1;
+  }
+
+  /* 5-column horizontal grid on desktop */
+  .areas__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-top: var(--space-7);
+    border-top: var(--rule-w) solid var(--rule);
+    border-bottom: var(--rule-w) solid var(--rule);
+    align-items: stretch;
+  }
+
+  .area-col {
+    display: flex;
+    flex-direction: column;
+    border-right: var(--rule-w) solid var(--rule);
+    transition: background-color var(--dur-ui) var(--ease-out);
+    height: 100%;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .area-col {
+        animation-name: area-col-entrance;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 40%;
+      }
+      .area-col:nth-child(1) { animation-delay: 0ms; }
+      .area-col:nth-child(2) { animation-delay: 45ms; }
+      .area-col:nth-child(3) { animation-delay: 90ms; }
+      .area-col:nth-child(4) { animation-delay: 135ms; }
+      .area-col:nth-child(5) { animation-delay: 180ms; }
+    }
+  }
+
+  @keyframes area-col-entrance {
+    from {
+      opacity: 0.35;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .area-col:last-child {
+    border-right: none;
+  }
+
+  @media (hover: hover) {
+    .area-col:hover {
+      background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+    }
+  }
+
+  .area-col__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-4) var(--space-5);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .area-col__heading::-webkit-details-marker { display: none; }
+  .area-col__heading:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  @media (min-width: 700px) {
+    .area-col__heading { cursor: default; }
+    .area-col__indicator { display: none; }
+  }
+
+  .area-col__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 5.75rem;
+  }
+
+  .area-col__title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.25rem, 1.45vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: var(--tracking-heading);
+    margin: 0;
+    text-align: left;
+    text-wrap: balance;
+    transition: color var(--dur-ui) var(--ease-out);
+  }
+  .area-col__indicator {
+    flex: none;
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+  }
+  .area-col[open] .area-col__indicator { transform: rotate(45deg); color: var(--accent); }
+
+  @media (hover: hover) {
+    .area-col:hover .area-col__title { color: var(--accent); }
+  }
+
+  /* Expandable specialty list */
+  .area-col__body {
+    padding: 0 var(--space-4) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+  .area-col:not([open]) > .area-col__body { display: none; }
+
+  .area-col__body-inner {
+    border-top: var(--rule-w) solid var(--rule);
+    padding-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .area-col__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .area-col__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--fg);
+    text-align: left;
+  }
+
+  .area-col__bullet {
+    color: var(--soft);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    opacity: 0.7;
+  }
+
+  .area-col__text {
+    flex: 1;
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 1023px) {
+    .areas__header-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-5);
+    }
+
+    .areas__actions {
+      margin-bottom: 0;
+    }
+
+    .areas__grid {
+      grid-template-columns: 1fr;
+      margin-top: var(--space-6);
+    }
+
+    .area-col {
+      border-right: none;
+      border-bottom: var(--rule-w) solid var(--rule);
+    }
+
+    .area-col:last-child {
+      border-bottom: none;
+    }
+
+    .area-col__heading {
+      padding: var(--space-5) var(--space-2);
+    }
+
+    .area-col__body {
+      padding: 0 var(--space-2) var(--space-5);
+    }
+
+    .area-col__head {
+      min-height: 0;
+    }
+  }
+</style>

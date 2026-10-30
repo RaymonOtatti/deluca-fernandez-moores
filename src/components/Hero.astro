@@ -1,0 +1,172 @@
+---
+// Hero: video principal cinematografico en ancho completo 100% y loop continuo sin cortes
+import film from '../assets/art/hero/19309-300877493_medium.mp4?url';
+import dfmIsologo from '../assets/brand/dfm-nav-isologo.svg?raw';
+---
+<section class="hero band band--ink" aria-labelledby="hero-title">
+  <h1 id="hero-title" class="visually-hidden">Deluca &amp; Fernández Moores — Abogados</h1>
+  <figure class="hero__fig">
+    <div class="hero__lit">
+      <video
+        class="hero__bg-video"
+        src={film}
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+        autoplay
+      ></video>
+    </div>
+  </figure>
+  <!-- Centered DFM_ISOLOGO over video with prominent, readable size -->
+  <div class="hero__centerpiece" aria-hidden="true">
+    <div class="hero__isologo" set:html={dfmIsologo} />
+  </div>
+</section>
+
+<script>
+  // Seamless loop restart with subtle ease transition before loop point
+  const video = document.querySelector<HTMLVideoElement>('.hero__bg-video');
+  if (video) {
+    let fading = false;
+    video.addEventListener('timeupdate', () => {
+      if (!video.duration) return;
+      const timeLeft = video.duration - video.currentTime;
+      if (timeLeft <= 0.7 && !fading) {
+        fading = true;
+        video.style.transition = 'opacity 700ms ease-out';
+        video.style.opacity = '0.35';
+      }
+    });
+
+    video.addEventListener('seeked', () => {
+      video.style.transition = 'opacity 700ms ease-in';
+      video.style.opacity = '1';
+      fading = false;
+    });
+
+    video.addEventListener('ended', () => {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    --hero-shade: var(--ink);
+    --hero-tint: var(--forest);
+    min-height: 100svh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--hero-shade);
+    overflow: hidden;
+    isolation: isolate;
+    padding: 0;
+  }
+
+  /* Video container: fills 100% of the web width edge-to-edge */
+  .hero__fig {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    z-index: 1;
+    overflow: hidden;
+    will-change: transform;
+  }
+
+  .hero__lit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__fig :global(.hero__bg-video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 100vw;
+    min-height: 100svh;
+    object-fit: cover;
+    object-position: center center;
+    opacity: 1;
+    filter: contrast(1.05) brightness(0.96);
+    will-change: transform;
+  }
+
+  /* Parallax scroll for video and centered logo */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__fig {
+        animation-name: hero-video-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0px 100vh;
+      }
+      .hero__centerpiece {
+        animation-name: hero-logo-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0px 80vh;
+      }
+    }
+  }
+
+  @keyframes hero-video-parallax {
+    from {
+      transform: translateY(0) scale(1);
+    }
+    to {
+      transform: translateY(18%) scale(1.06);
+    }
+  }
+
+  @keyframes hero-logo-parallax {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-24%) scale(0.92);
+    }
+  }
+
+  /* Centered Isologo over video */
+  .hero__centerpiece {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-inline: var(--pad);
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .hero__isologo {
+    width: clamp(20rem, 70vw, 60rem);
+    max-width: 100%;
+    --hero-fg: var(--white);
+    color: var(--hero-fg);
+    transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out);
+  }
+
+  .hero__isologo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+</style>
