@@ -12,12 +12,14 @@ interface Props {
   description?: string;
   /** Prefix for the header's in-page links: "" on the home page, "/" on pages served elsewhere (404) */
   linkBase?: string;
+  /** Search visibility; error pages should remain out of search results. */
+  indexable?: boolean;
 }
 
-const { title = site.title, description = site.description, linkBase = '' } = Astro.props;
+const { title = site.title, description = site.description, linkBase = '', indexable = true } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const ogImage = new URL(`${base}og.jpg`, Astro.site).href;
-const url = new URL(Astro.url.pathname, Astro.site).href;
+const url = 'https://delucafmoores.com.ar/';
 ---
 <!doctype html>
 <html lang={site.lang}>
@@ -26,8 +28,8 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {/* Prototype for the pitch: keep it out of search until the client approves a launch */}
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content={indexable ? 'index, follow, max-image-preview:large' : 'noindex, nofollow'} />
+    <link rel="canonical" href={url} />
     <meta name="color-scheme" content="only light" />
     <meta name="theme-color" content={site.themeColor} />
 
@@ -36,7 +38,7 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
          compete with the hero. It loads when first used, with swap */}
     <link rel="preload" href={valiente} as="font" type="font/woff2" crossorigin />
 
-    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${base}favicon.svg?v=2`} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
     <link rel="manifest" href={`${base}site.webmanifest`} />
 
@@ -51,6 +53,29 @@ const url = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={site.ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {indexable && <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LegalService',
+      name: site.name,
+      url,
+      image: ogImage,
+      description: site.description,
+      telephone: '+54 11 6407-3969',
+      email: 'deluca.santiago@gmail.com',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Pasaje Carabelas 241, Piso 4',
+        addressLocality: 'Buenos Aires',
+        addressRegion: 'Ciudad Autónoma de Buenos Aires',
+        postalCode: 'C1009',
+        addressCountry: 'AR',
+      },
+      areaServed: [{ '@type': 'City', name: 'Buenos Aires' }, { '@type': 'Country', name: 'Argentina' }],
+      knowsAbout: ['Derecho societario', 'Compliance', 'Litigios civiles y comerciales', 'Derecho aduanero', 'Derecho penal económico', 'Derecho a la salud'],
+    })} />}
       <!-- Google Fonts: Instrument Serif, JetBrains Mono, Zen Kaku Gothic New -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

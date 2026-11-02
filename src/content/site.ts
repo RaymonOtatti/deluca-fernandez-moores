@@ -3,9 +3,9 @@
 export const site = {
   name: 'Deluca & Fernández Moores',
   shortName: 'DyFM',
-  title: 'Deluca & Fernández Moores · Abogados | Estudio Jurídico Buenos Aires',
+  title: 'Estudio Jurídico en Buenos Aires | Deluca & Fernández Moores',
   description:
-    'Estudio Jurídico en Buenos Aires especialista en derecho societario, compliance, litigios civiles y comerciales, derecho aduanero, penal económico y derecho a la salud.',
+    'Estudio jurídico en Buenos Aires. Asesoramiento en derecho societario, compliance, litigios civiles y comerciales, derecho aduanero, penal económico y derecho a la salud.',
   lang: 'es-AR',
   ogLocale: 'es_AR',
   themeColor: '#141414',

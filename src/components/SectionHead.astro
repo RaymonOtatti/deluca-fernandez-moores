@@ -15,7 +15,7 @@ const { title, headingId, stacked = false, breakTitle = false, centered = false 
 ---
 <div class:list={['section-head', 'grid', 'reveal', { 'section-head--stacked': stacked || centered, 'section-head--centered': centered }]}>
   <div class="section-head__body">
-    <h2 id={headingId} class="section-head__title">{title[0]}{title[1] && <>{breakTitle ? <br /> : ' '}<span class="soft">{title[1]}</span></>}</h2>
+    <h2 id={headingId} class="section-head__title">{title[0]}{title[1] && <>{breakTitle ? <br /> : ' '}<span class="soft">{title[1]}</span></>}.</h2>
     <slot />
   </div>
 </div>
@@ -33,6 +33,9 @@ const { title, headingId, stacked = false, breakTitle = false, centered = false 
     line-height: var(--leading-heading);
     letter-spacing: var(--tracking-heading);
     margin-inline: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.16em;
   }
 
   .section-head--stacked .section-head__body { grid-column: 1 / -1; }

@@ -2,9 +2,9 @@ import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 import { shortenScopes } from './scripts/shorten-scopes.mjs';
 
-// Planned public URL of the prototype; confirmed at Gate 2 (PLAN.md).
-const SITE = process.env.SITE_URL ?? 'https://raymonotatti.github.io';
-const BASE = process.env.BASE_PATH ?? '/deluca-fernandez-moores/';
+// Canonical production domain; may be overridden for a separate preview deployment.
+const SITE = process.env.SITE_URL ?? 'https://delucafmoores.com.ar';
+const BASE = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({
   site: SITE,

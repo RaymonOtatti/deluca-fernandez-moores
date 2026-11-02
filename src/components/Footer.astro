@@ -13,7 +13,7 @@ const { linkBase = '' } = Astro.props;
 <footer id="contacto" class="footer band band--ink" aria-label="Pie de página con ubicación y datos del estudio">
   <div class="footer__top">
     <section class="footer__map-panel reveal line-top" aria-labelledby="footer-map-title">
-      <h2 id="footer-map-title" class="label soft footer__map-label">Ubicación</h2>
+      <h2 id="footer-map-title" class="label soft footer__map-label">Ubicación.</h2>
       <a class="footer__map-link" href={contact.map} target="_blank" rel="noopener noreferrer">
         <span>{contact.address.street}, {contact.address.unit}</span>
         <span class="footer__map-action">Abrir en Google Maps <span aria-hidden="true">↗</span></span>
@@ -22,7 +22,7 @@ const { linkBase = '' } = Astro.props;
     </section>
 
     <nav class="footer__site-map reveal line-top" aria-labelledby="footer-site-map-title">
-      <h3 id="footer-site-map-title" class="label soft">Mapa del sitio</h3>
+      <h3 id="footer-site-map-title" class="label soft">Mapa del sitio.</h3>
       <ul role="list">
         <li><a href={linkBase || '/'}>Inicio</a></li>
         {nav.map((item) => <li><a href={linkBase + item.href}>{item.label}</a></li>)}
