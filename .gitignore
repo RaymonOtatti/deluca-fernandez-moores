@@ -12,3 +12,8 @@ design/map/osm/
 __pycache__/
 src/assets/art/hero/film.mp4
 src/assets/art/hero/film-two.mp4
+WEB/
+WEB.zip
+deploy-hosting.zip
+*.bat
+*.url

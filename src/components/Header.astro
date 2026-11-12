@@ -562,6 +562,26 @@ const { linkBase = '' } = Astro.props;
   @media (prefers-reduced-motion: no-preference) {
     .menu-button:active { scale: 0.94; }
   }
+  @media (hover: none) {
+    .menu-button:active,
+    .menu-button:focus:not(:focus-visible) {
+      background: var(--white);
+      color: var(--ink-pure);
+      border-color: var(--white);
+    }
+    .site-header[data-on-light] .menu-button:active,
+    .site-header[data-on-light] .menu-button:focus:not(:focus-visible) {
+      background: var(--ink-pure);
+      color: var(--white);
+      border-color: var(--white);
+    }
+    .site-header[data-on-hero] .menu-button:active,
+    .site-header[data-on-hero] .menu-button:focus:not(:focus-visible) {
+      background: transparent;
+      color: var(--white);
+      border-color: var(--white);
+    }
+  }
 
   /* When on a lighter background band, invert button colors */
   .site-header[data-on-light] .menu-button {

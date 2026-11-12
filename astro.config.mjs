@@ -2,9 +2,11 @@ import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 import { shortenScopes } from './scripts/shorten-scopes.mjs';
 
-// Canonical production domain; may be overridden for a separate preview deployment.
-const SITE = process.env.SITE_URL ?? 'https://delucafmoores.com.ar';
-const BASE = process.env.BASE_PATH ?? '/';
+// Default to GitHub Pages base path when running in CI or if GITHUB_ACTIONS is present;
+// otherwise root for custom domain or local development.
+const isCI = Boolean(process.env.GITHUB_ACTIONS);
+const SITE = process.env.SITE_URL ?? (isCI ? 'https://raymonotatti.github.io' : 'https://delucafmoores.com.ar');
+const BASE = process.env.BASE_PATH ?? (isCI ? '/deluca-fernandez-moores/' : '/');
 
 export default defineConfig({
   site: SITE,
